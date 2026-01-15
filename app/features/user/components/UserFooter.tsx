@@ -10,10 +10,11 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
+import { Link } from "react-router";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1a1f3c] text-white">
+    <footer className="bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
@@ -29,155 +30,139 @@ export default function Footer() {
               thị trường. Giao dịch an toàn, nhanh chóng và bảo mật
             </p>
             <div className="flex items-center gap-3 pt-2">
-              <a
-                href="#"
-                className="w-9 h-9 bg-[#2a3156] rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+              <button
+                className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center
+             transition hover:-translate-y-0.5 hover:bg-blue-600"
+                aria-label="Follow us on Facebook"
               >
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-[#2a3156] rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                <Facebook className="w-4 h-4 text-white" />
+              </button>
+
+              <button
+                className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center
+             transition hover:-translate-y-0.5 hover:bg-red-600"
+                aria-label="Follow us on YouTube"
               >
                 <Youtube className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-[#2a3156] rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors"
+              </button>
+              <button
+                className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center
+             transition hover:-translate-y-0.5 hover:bg-blue-500"
+                aria-label="Follow us on Telegram"
               >
                 <Send className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-[#2a3156] rounded-full flex items-center justify-center hover:bg-indigo-600 transition-colors"
+              </button>
+              <button
+                className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center
+             transition hover:-translate-y-0.5 hover:bg-indigo-600"
+                aria-label="Follow us on Messenger"
               >
                 <MessageCircle className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-[#2a3156] rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
+              </button>
+              <button
+                className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center
+             transition hover:-translate-y-0.5 hover:bg-gray-700"
+                aria-label="Follow us on TikTok"
               >
                 <Music2 className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              LIÊN KẾT NHANH
+            <h3 className="text-base font-semibold mb-4 text-white">
+              <span className="inline-block">
+                LIÊN KẾT NHANH
+                <span className="block border-b-3 border-white/80 mt-1 w-12"></span>
+              </span>
             </h3>
+
             <ul className="space-y-3">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Trang Chủ
-                </a>
+                <button className="footer-link">Trang Chủ</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Mua Tài Khoản
-                </a>
+                <button className="footer-link">Mua Tài Khoản</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Dịch Vụ Game
-                </a>
+                <button className="footer-link">Dịch Vụ Game</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Vòng Quay May
-                  Mắn
-                </a>
+                <button className="footer-link">Vòng Quay May Mắn</button>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              HỖ TRỢ KHÁCH HÀNG
+            <h3 className="text-base font-semibold mb-4 text-white">
+              <span className="inline-block">
+                HỖ TRỢ KHÁCH HÀNG
+                <span className="block border-b-3 border-white/80 mt-1 w-12"></span>
+              </span>
             </h3>
             <ul className="space-y-3">
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Hướng Dẫn Mua
-                  Hàng
-                </a>
+                <button className="footer-link">Hướng Dẫn Mua Hàng</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Chính Sách Bảo
-                  Mật
-                </a>
+                <button className="footer-link">Chính Sách Bảo Mật</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Điều Khoản Sử
-                  Dụng
-                </a>
+                <button className="footer-link">Điều Khoản Sử Dụng</button>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-yellow-400 transition-colors flex items-center gap-2"
-                >
-                  <span className="text-yellow-400">{">"}</span> Liên Hệ
-                </a>
+                <button className="footer-link">Liên Hệ</button>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              THÔNG TIN LIÊN HỆ
+            <h3 className="text-base font-semibold mb-4 text-white">
+              <span className="inline-block">
+                THÔNG TIN LIÊN HỆ
+                <span className="block border-b-3 border-white/80 mt-1 w-12"></span>
+              </span>
             </h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-gray-400">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shrink-0">
-                  <Phone className="w-4 h-4 text-[#1a1f3c]" />
+              <li className="flex items-center gap-3 text-gray-400 ">
+                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center shrink-0">
+                  <Phone className="w-4 h-4 text-gray-200 " />
                 </div>
-                <span>Hotline: 000000000</span>
+                <a href="tel:000000000 " className="text-sm">
+                  Hotline: 000000000
+                </a>
+              </li>
+
+              <li className="flex items-center gap-3 text-gray-400">
+                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-gray-200" />
+                </div>
+                <a href="mailto:meoroblux@gmail.com" className="text-sm">
+                  Email: meoroblux@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shrink-0">
-                  <Mail className="w-4 h-4 text-[#1a1f3c]" />
+                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center shrink-0">
+                  <MessageSquare className="w-4 h-4 text-gray-200" />
                 </div>
-                <span>Email: meoroblux@gmail.com</span>
+                <a
+                  href="https://zalo.me/0332345643"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm"
+                >
+                  Zalo: 0332.345.643
+                </a>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shrink-0">
-                  <MessageSquare className="w-4 h-4 text-[#1a1f3c]" />
+                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center shrink-0">
+                  <MapPin className="w-4 h-4 text-gray-200" />
                 </div>
-                <span>Zalo: 0332.345.643</span>
+                <span className="text-sm">Địa chỉ: TPHCM, Việt Nam</span>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shrink-0">
-                  <MapPin className="w-4 h-4 text-[#1a1f3c]" />
+                <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 text-gray-200" />
                 </div>
-                <span>Địa chỉ: TPHCM, Việt Nam</span>
-              </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center shrink-0">
-                  <Clock className="w-4 h-4 text-[#1a1f3c]" />
-                </div>
-                <span>Giờ làm việc: 9:00 - 22:00</span>
+                <span className="text-sm">Giờ làm việc: 9:00 - 22:00</span>
               </li>
             </ul>
           </div>
@@ -189,13 +174,20 @@ export default function Footer() {
           <p className="text-center text-gray-400 text-sm">
             © 2026 - Bản quyền thuộc về{" "}
             <a
-              href="#"
+              href="https://meoroblox.com"
               className="text-yellow-400 hover:underline font-semibold"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               MEOROBLOX.COM
             </a>{" "}
             - Thiết kế bởi{" "}
-            <a href="#" className="text-pink-500 hover:underline font-semibold">
+            <a
+              href="https://tuanori.vn"
+              className="text-pink-500 hover:underline font-semibold"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               TUANORI.VN
             </a>
           </p>
