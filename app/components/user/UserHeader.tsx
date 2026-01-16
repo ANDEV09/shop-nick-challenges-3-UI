@@ -1,8 +1,9 @@
-import { User, Key, TrendingUp, Info, X, Clock } from "lucide-react";
+import { User, Key } from "lucide-react";
+import { Link } from "react-router";
 
 export default function UserHeader() {
   const NAV_ITEMS = [
-    { label: "TRANG CHỦ", href: "#", active: true },
+    { label: "TRANG CHỦ", href: "/", active: true },
     { label: "NẠP TIỀN", href: "#" },
     { label: "DỊCH VỤ", href: "#" },
     { label: "NICK GAME", href: "#" },
@@ -11,7 +12,6 @@ export default function UserHeader() {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
         <div className="flex items-center">
           <img
             src="https://meoroblox.com/storage/config/1746807379_d93b987255372da1b9eb977de51f7550.png"
@@ -28,7 +28,7 @@ export default function UserHeader() {
                   href={item.href}
                   className={`
             relative pb-1 font-bold transition-colors
-            ${item.active ? "text-blue-600" : "text-gray-600 hover:text-blue-600"}
+            ${item.active ? "text-blue-600" : "text-gray-800 hover:text-blue-600"}
             after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5
             after:bg-blue-600 after:transition-all after:duration-300
             ${item.active ? "after:w-full" : "after:w-0 hover:after:w-full"}
@@ -42,14 +42,20 @@ export default function UserHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-gray-50 transition">
+          <Link
+            to="/login"
+            className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-700 hover:text-white transition"
+          >
             <User size={16} className="mb-1" />
             <span className="font-semibold text-sm ">ĐĂNG NHẬP</span>
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+          </Link>
+          <Link
+            to="/register"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          >
             <Key size={16} className="mb-1" />
             <span className="font-semibold text-sm">ĐĂNG KÝ</span>
-          </button>
+          </Link>
         </div>
       </div>
     </header>

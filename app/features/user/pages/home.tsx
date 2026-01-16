@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Info, X, Clock } from "lucide-react";
-import UserHeader from "~/features/user/components/UserHeader";
-import UserTopBar from "~/features/user/components/UserTopBar";
+import UserHeader from "~/components/user/UserHeader";
+import UserTopBar from "~/components/user/UserTopBar";
 import UserHero from "~/features/user/components/UserHero";
-import UserFooter from "~/features/user/components/UserFooter";
+import UserFooter from "~/components/user/UserFooter";
 
 export default function Home() {
   const [showBanner, setShowBanner] = useState(true);
