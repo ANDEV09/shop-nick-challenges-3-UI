@@ -145,3 +145,40 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* TOAST TO HƠN */
+.sonner-toast-lg {
+  min-width: 380px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  font-size: 16px;
+  box-shadow: 0 14px 40px hsl(var(--foreground) / 0.18);
+}
+
+/* TITLE TO + ĐẬM */
+.sonner-title-lg {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* DESCRIPTION TO */
+.sonner-desc-lg {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* MÀU NỔI THEO TYPE */
+.sonner-toast-lg[data-type="success"] {
+  background: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 72% 29%));
+  color: white;
+}
+
+.sonner-toast-lg[data-type="error"] {
+  background: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 70% 45%));
+  color: white;
+}
+
+.sonner-toast-lg[data-type="warning"] {
+  background: linear-gradient(135deg, hsl(38 92% 50%), hsl(32 95% 44%));
+  color: #111;
+}

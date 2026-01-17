@@ -1,6 +1,4 @@
 "use client";
-
-import type React from "react";
 import * as z from "zod";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,33 +22,28 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { useRegister } from "~/hooks/useRegister";
 
 export default function RegisterForm() {
+  const { handleRegister, isLoading } = useRegister();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",
       password: "",
-      repassword: "",
+      confirm_password: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof registerSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    });
+  async function onSubmit(data: z.infer<typeof registerSchema>) {
+    try {
+      console.log("Register data:", data);
+      await handleRegister(data);
+    } catch (error) {
+      console.error("Register error:", error);
+    }
   }
   return (
     <Card className="w-full max-w-md mx-auto bg-white rounded-sm p-8 border border-gray-100 my-8">
@@ -65,8 +58,12 @@ export default function RegisterForm() {
       </CardHeader>
       <CardContent className="px-0">
         <form
-          id="form-rhf-demo"
-          onSubmit={form.handleSubmit(onSubmit)}
+          method="POST"
+          id="form-register"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit(onSubmit)();
+          }}
           className="space-y-1"
         >
           <FieldGroup className="gap-2!">
@@ -87,6 +84,7 @@ export default function RegisterForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Nhập username của bạn"
                     autoComplete="username"
+                    disabled={isLoading}
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
                   />
                   {fieldState.invalid && (
@@ -116,6 +114,7 @@ export default function RegisterForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Nhập email của bạn"
                     autoComplete="email"
+                    disabled={isLoading}
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
                   />
                   {fieldState.invalid && (
@@ -146,6 +145,7 @@ export default function RegisterForm() {
                     placeholder="Nhập mật khẩu"
                     autoComplete="new-password"
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
+                    disabled={isLoading}
                   />
                   {fieldState.invalid && (
                     <FieldError
@@ -157,24 +157,25 @@ export default function RegisterForm() {
               )}
             />
             <Controller
-              name="repassword"
+              name="confirm_password"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    htmlFor="repassword-input"
+                    htmlFor="confirm-password-input"
                     className="text-sm font-bold text-gray-800 flex items-center"
                   >
                     Xác nhận mật khẩu
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="repassword-input"
+                    id="confirm-password-input"
                     type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Nhập lại mật khẩu"
                     autoComplete="new-password"
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
+                    disabled={isLoading}
                   />
                   {fieldState.invalid && (
                     <FieldError
@@ -192,15 +193,17 @@ export default function RegisterForm() {
         <div className="flex gap-3 w-full">
           <Button
             type="submit"
-            form="form-rhf-demo"
-            className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-lg shadow transition"
+            form="form-register"
+            disabled={isLoading}
+            className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-lg shadow transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Đăng Ký
+            {isLoading ? "Đang xử lý..." : "Đăng Ký"}
           </Button>
           <Button
             type="reset"
             onClick={() => form.reset()}
-            className="px-6 h-10 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-base rounded-lg transition"
+            disabled={isLoading}
+            className="px-6 h-10 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-base rounded-lg transition disabled:opacity-50"
           >
             Reset
           </Button>
