@@ -21,23 +21,10 @@ export const USER_ENDPOINTS = {
   CHANGE_PASSWORD: "/users/change-password",
 } as const;
 
-// ==================== POST ENDPOINTS ====================
-export const POST_ENDPOINTS = {
-  GET_POSTS: "/posts",
-  GET_POST_BY_ID: (postId: string) => `/posts/${postId}`,
-  CREATE_POST: "/posts",
-  UPDATE_POST: (postId: string) => `/posts/${postId}`,
-  DELETE_POST: (postId: string) => `/posts/${postId}`,
-  LIKE_POST: (postId: string) => `/posts/${postId}/like`,
-  UNLIKE_POST: (postId: string) => `/posts/${postId}/unlike`,
-} as const;
-
-// ==================== COMMENT ENDPOINTS ====================
-export const COMMENT_ENDPOINTS = {
-  GET_COMMENTS: (postId: string) => `/posts/${postId}/comments`,
-  CREATE_COMMENT: (postId: string) => `/posts/${postId}/comments`,
-  UPDATE_COMMENT: (commentId: string) => `/comments/${commentId}`,
-  DELETE_COMMENT: (commentId: string) => `/comments/${commentId}`,
+// ==================== GAME ENDPOINTS ====================
+export const GAME_ENDPOINTS = {
+  GET_CATEGORIES: "/game-categories",
+  GET_GROUPS_BY_CATEGORY: (categoryId: string) => `/game-groups/${categoryId}`,
 } as const;
 
 // ==================== UPLOAD ENDPOINTS ====================
@@ -45,16 +32,6 @@ export const UPLOAD_ENDPOINTS = {
   UPLOAD_IMAGE: "/upload/image",
   UPLOAD_FILE: "/upload/file",
   UPLOAD_MULTIPLE: "/upload/multiple",
-} as const;
-
-// ==================== NOTIFICATION ENDPOINTS ====================
-export const NOTIFICATION_ENDPOINTS = {
-  GET_NOTIFICATIONS: "/notifications",
-  MARK_AS_READ: (notificationId: string) =>
-    `/notifications/${notificationId}/read`,
-  MARK_ALL_AS_READ: "/notifications/read-all",
-  DELETE_NOTIFICATION: (notificationId: string) =>
-    `/notifications/${notificationId}`,
 } as const;
 
 // ==================== CONFIG CONSTANTS ====================
