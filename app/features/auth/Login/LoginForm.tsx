@@ -1,8 +1,5 @@
 "use client";
-
-import type React from "react";
 import * as z from "zod";
-import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -24,8 +21,10 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-
+import { useLogin } from "~/hooks/userLogin";
 export default function LoginForm() {
+  const { handleLogin, isLoading } = useLogin();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -34,21 +33,13 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof loginSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    });
+  async function onSubmit(data: z.infer<typeof loginSchema>) {
+    try {
+      console.log("Login data:", data);
+      await handleLogin(data);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   }
   return (
     <Card className="w-full max-w-md mx-auto bg-white rounded-sm p-8 border border-gray-100 my-8">
@@ -63,8 +54,12 @@ export default function LoginForm() {
       </CardHeader>
       <CardContent className="px-0">
         <form
-          id="form-rhf-demo"
-          onSubmit={form.handleSubmit(onSubmit)}
+          method="POST"
+          id="form-login"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit(onSubmit)();
+          }}
           className="space-y-1"
         >
           <FieldGroup className="gap-2!">
@@ -85,6 +80,7 @@ export default function LoginForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Nhập username của bạn"
                     autoComplete="username"
+                    disabled={isLoading}
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
                   />
                   {fieldState.invalid && (
@@ -114,6 +110,7 @@ export default function LoginForm() {
                     aria-invalid={fieldState.invalid}
                     placeholder="Nhập mật khẩu"
                     autoComplete="current-password"
+                    disabled={isLoading}
                     className="h-12 bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus-visible:ring-0 focus:border-blue-400 transition"
                   />
                   {fieldState.invalid && (
@@ -132,7 +129,8 @@ export default function LoginForm() {
         <div className="flex gap-3 w-full">
           <Button
             type="submit"
-            form="form-rhf-demo"
+            form="form-login"
+            disabled={isLoading}
             className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-lg shadow transition"
           >
             Đăng Nhập

@@ -1,6 +1,5 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosResponse, InternalAxiosRequestConfig } from "axios";
-
 import CookieStorage from "./cookie-storage";
 import AuthApi from "~/api-requests/auth.requests";
 import { API_OPTIONS } from "~/constants/api.options";
