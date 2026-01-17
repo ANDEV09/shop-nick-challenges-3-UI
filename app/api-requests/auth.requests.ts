@@ -8,19 +8,14 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
+  username: string;
   email: string;
   password: string;
-  name: string;
+  confirm_password: string;
 }
 
-export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
+export interface RegisterResponse {
+  message: string;
 }
 
 export interface RefreshTokenResponse {
@@ -29,35 +24,27 @@ export interface RefreshTokenResponse {
 }
 
 const AuthApi = {
-  login: async (payload: LoginPayload): Promise<LoginResponse> => {
-    const response = await publicApi.post<LoginResponse>(
-      AUTH_ENDPOINTS.LOGIN,
-      payload,
-    );
+  // login: async (payload: LoginPayload): Promise<RegisterResponse> => {
+  //   const response = await publicApi.post<RegisterResponse>(
+  //     AUTH_ENDPOINTS.LOGIN,
+  //     payload,
+  //   );
 
-    CookieStorage.setItem("access_token", response.data.access_token, {
-      expires: 1,
-    });
-    CookieStorage.setItem("refresh_token", response.data.refresh_token, {
-      expires: 7,
-    });
+  //   CookieStorage.setItem("access_token", response.data.access_token, {
+  //     expires: 1,
+  //   });
+  //   CookieStorage.setItem("refresh_token", response.data.refresh_token, {
+  //     expires: 7,
+  //   });
 
-    return response.data;
-  },
+  //   return response.data;
+  // },
 
-  register: async (payload: RegisterPayload): Promise<LoginResponse> => {
-    const response = await publicApi.post<LoginResponse>(
+  register: async (payload: RegisterPayload): Promise<RegisterResponse> => {
+    const response = await publicApi.post<RegisterResponse>(
       AUTH_ENDPOINTS.REGISTER,
       payload,
     );
-
-    CookieStorage.setItem("access_token", response.data.access_token, {
-      expires: 1,
-    });
-    CookieStorage.setItem("refresh_token", response.data.refresh_token, {
-      expires: 7,
-    });
-
     return response.data;
   },
 
@@ -66,10 +53,7 @@ const AuthApi = {
    */
   refreshToken: async (): Promise<RefreshTokenResponse> => {
     const refreshToken = CookieStorage.getItem("refresh_token");
-
-    if (!refreshToken) {
-      throw new Error("No refresh token available");
-    }
+    if (!refreshToken) throw new Error("No refresh token available");
 
     const response = await publicApi.post<RefreshTokenResponse>(
       AUTH_ENDPOINTS.REFRESH_TOKEN,
@@ -82,7 +66,6 @@ const AuthApi = {
     CookieStorage.setItem("refresh_token", response.data.refresh_token, {
       expires: 7,
     });
-
     return response.data;
   },
 
@@ -93,7 +76,6 @@ const AuthApi = {
       console.error("Logout error:", error);
     } finally {
       CookieStorage.clearAuth();
-
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }
