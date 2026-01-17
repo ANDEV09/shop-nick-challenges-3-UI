@@ -46,6 +46,18 @@ export default function AccountHistories() {
       password: "xyz789",
       amount: 100000,
     },
+        {
+      time: "2025-01-13 09:15",
+      username: "roblox_fan",
+      password: "xyz789",
+      amount: 100000,
+    },
+        {
+      time: "2025-01-13 09:15",
+      username: "roblox_fan",
+      password: "xyz789",
+      amount: 100000,
+    },
   ];
 
   return (

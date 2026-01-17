@@ -15,12 +15,12 @@ const registerSchema = z
       .string()
       .min(6, "Mật khẩu phải có ít nhất 6 ký tự.")
       .max(50, "Mật khẩu không được vượt quá 50 ký tự."),
-    repassword: z.string().min(6).max(50),
+    confirm_password: z.string().min(6).max(50),
   })
   .superRefine((data, ctx) => {
-    if (data.password !== data.repassword) {
+    if (data.password !== data.confirm_password) {
       ctx.addIssue({
-        path: ["repassword"],
+        path: ["confirm_password"],
         code: z.ZodIssueCode.custom,
         message: "Mật khẩu nhập lại không khớp.",
       });

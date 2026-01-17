@@ -17,7 +17,7 @@ export default function UserSidebar({
   onMenuClick,
 }: UserSidebarProps) {
   return (
-    <div className="w-72 h-120 bg-white shadow-md">
+    <div className="w-72 bg-white shadow-md">
       <div>
         <h2 className="bg-gray-200 text-blue-600 font-bold p-3 text-sm border-b-2 border-blue-500">
           MENU TÀI KHOẢN
