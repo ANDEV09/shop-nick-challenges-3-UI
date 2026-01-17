@@ -1,5 +1,7 @@
 import { User, Key } from "lucide-react";
 import { Link } from "react-router";
+import AuthApi from "~/api-requests/auth.requests";
+import { useAuthStore } from "~/store/useAuthStore";
 
 export default function UserHeader() {
   const NAV_ITEMS = [
@@ -8,6 +10,8 @@ export default function UserHeader() {
     { label: "DỊCH VỤ", href: "#" },
     { label: "NICK GAME", href: "#" },
   ];
+
+  const { isAuthenticated, authUser } = useAuthStore();
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -42,20 +46,39 @@ export default function UserHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/login"
-            className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-700 hover:text-white transition"
-          >
-            <User size={16} className="mb-1" />
-            <span className="font-semibold text-sm ">ĐĂNG NHẬP</span>
-          </Link>
-          <Link
-            to="/register"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            <Key size={16} className="mb-1" />
-            <span className="font-semibold text-sm">ĐĂNG KÝ</span>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <span className="font-semibold text-sm">
+                {authUser?.username} - {authUser?.balance.toLocaleString()}đ
+              </span>
+              <button
+                onClick={() => {
+                  useAuthStore.getState().setUser(null);
+                  AuthApi.logout();
+                }}
+                className="flex items-center gap-2 px-4 py-2 border border-red-600 rounded-md hover:bg-red-700 hover:text-white transition"
+              >
+                <User size={16} className="mb-1" /> ĐĂNG XUẤT
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-700 hover:text-white transition"
+              >
+                <User size={16} className="mb-1" />
+                <span className="font-semibold text-sm ">ĐĂNG NHẬP</span>
+              </Link>
+              <Link
+                to="/register"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              >
+                <Key size={16} className="mb-1" />
+                <span className="font-semibold text-sm">ĐĂNG KÝ</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
