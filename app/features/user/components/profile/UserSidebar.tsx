@@ -6,21 +6,27 @@ import {
   ShoppingBag,
   User,
 } from "lucide-react";
-import { useState } from "react";
 
-export default function UserSidebar() {
-  const [activeMenu, setActiveMenu] = useState("account-info");
+type UserSidebarProps = {
+  activeMenu: string;
+  onMenuClick: (menuId: string) => void;
+};
+
+export default function UserSidebar({
+  activeMenu,
+  onMenuClick,
+}: UserSidebarProps) {
   return (
-    <div className="w-72 bg-white shadow-md">
+    <div className="w-72 h-120 bg-white shadow-md">
       <div>
         <h2 className="bg-gray-200 text-blue-600 font-bold p-3 text-sm border-b-2 border-blue-500">
           MENU TÀI KHOẢN
         </h2>
         <div>
           <button
-            onClick={() => setActiveMenu("account-info")}
+            onClick={() => onMenuClick("profile-info")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
-              activeMenu === "account-info"
+              activeMenu === "profile-info"
                 ? "bg-blue-600 text-white font-semibold"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
@@ -30,7 +36,7 @@ export default function UserSidebar() {
           </button>
 
           <button
-            onClick={() => setActiveMenu("card-topup")}
+            onClick={() => onMenuClick("card-topup")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
               activeMenu === "card-topup"
                 ? "bg-blue-600 text-white font-semibold"
@@ -42,7 +48,7 @@ export default function UserSidebar() {
           </button>
 
           <button
-            onClick={() => setActiveMenu("atm-topup")}
+            onClick={() => onMenuClick("atm-topup")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
               activeMenu === "atm-topup"
                 ? "bg-blue-600 text-white font-semibold"
@@ -54,7 +60,7 @@ export default function UserSidebar() {
           </button>
 
           <button
-            onClick={() => setActiveMenu("balance-history")}
+            onClick={() => onMenuClick("balance-history")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
               activeMenu === "balance-history"
                 ? "bg-blue-600 text-white font-semibold"
@@ -73,9 +79,9 @@ export default function UserSidebar() {
         </h2>
         <div>
           <button
-            onClick={() => setActiveMenu("account-purchased")}
+            onClick={() => onMenuClick("purchased-accounts")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
-              activeMenu === "account-purchased"
+              activeMenu === "purchased-accounts"
                 ? "bg-blue-600 text-white font-semibold"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
@@ -85,9 +91,9 @@ export default function UserSidebar() {
           </button>
 
           <button
-            onClick={() => setActiveMenu("wheel-history")}
+            onClick={() => onMenuClick("spin-history")}
             className={`w-full text-left px-4 py-3 border-b transition-colors flex items-center gap-2 text-sm ${
-              activeMenu === "wheel-history"
+              activeMenu === "spin-history"
                 ? "bg-blue-600 text-white font-semibold"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
