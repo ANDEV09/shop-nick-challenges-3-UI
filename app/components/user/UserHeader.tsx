@@ -56,9 +56,9 @@ export default function UserHeader() {
                   useAuthStore.getState().setUser(null);
                   AuthApi.logout();
                 }}
-                className="flex items-center gap-2 px-4 py-2 border border-red-600 rounded-md hover:bg-red-700 hover:text-white transition"
+                className="flex items-center font-semibold gap-2 px-3 py-1.5 text-sm border border-red-600 rounded-md bg-red-700 text-white transition"
               >
-                <User size={16} className="mb-1" /> ĐĂNG XUẤT
+                <User size={14} className="mb-1" /> ĐĂNG XUẤT
               </button>
             </>
           ) : (
