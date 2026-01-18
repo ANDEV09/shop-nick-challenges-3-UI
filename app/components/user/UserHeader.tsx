@@ -4,13 +4,6 @@ import AuthApi from "~/api-requests/auth.requests";
 import { useAuthStore } from "~/store/useAuthStore";
 
 export default function UserHeader() {
-  const NAV_ITEMS = [
-    { label: "TRANG CHỦ", href: "/", active: true },
-    { label: "NẠP TIỀN", href: "#" },
-    { label: "DỊCH VỤ", href: "#" },
-    { label: "NICK GAME", href: "#" },
-  ];
-
   const { isAuthenticated, authUser } = useAuthStore();
 
   return (
@@ -26,22 +19,50 @@ export default function UserHeader() {
 
         <nav className="hidden md:block" aria-label="Main navigation">
           <ul className="flex items-center gap-8">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  className={`
-            relative pb-1 font-bold transition-colors
-            ${item.active ? "text-blue-600" : "text-gray-800 hover:text-blue-600"}
-            after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5
-            after:bg-blue-600 after:transition-all after:duration-300
-            ${item.active ? "after:w-full" : "after:w-0 hover:after:w-full"}
-          `}
+            <li>
+              <Link
+                to="/"
+                className="relative pb-1 font-semibold transition-colors text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-full"
+              >
+                TRANG CHỦ
+              </Link>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+              >
+                NẠP TIỀN
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+              >
+                LIÊN HỆ ADMIN
+              </a>
+            </li>
+            {isAuthenticated && (
+              <li>
+                <Link
+                  to="/staff"
+                  className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
                 >
-                  {item.label}
-                </a>
+                  ĐĂNG BÁN TÀI KHOẢN
+                </Link>
               </li>
-            ))}
+            )}
+            {isAuthenticated && authUser?.role === "ADMIN" && (
+              <li>
+                <Link
+                  to="/admin"
+                  className="relative pb-1 font-bold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+                >
+                  ADMIN PANNEL
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
 
