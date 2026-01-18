@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthUser {
   id: string;
@@ -16,13 +17,24 @@ interface AuthStore {
 
 // Zustand
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  authUser: null,
-  isAuthenticated: false,
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      authUser: null,
+      isAuthenticated: false,
 
-  setUser: (user) =>
-    set({
-      authUser: user,
-      isAuthenticated: Boolean(user),
+      setUser: (user) =>
+        set({
+          authUser: user,
+          isAuthenticated: Boolean(user),
+        }),
     }),
-}));
+    {
+      name: "auth-store",
+      partialize: (state) => ({
+        authUser: state.authUser,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    },
+  ),
+);
