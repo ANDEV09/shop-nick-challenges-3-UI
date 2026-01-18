@@ -6,28 +6,59 @@ export interface GameCategory {
   name: string;
   slug?: string;
   status?: number;
-  description?: string;
-  image?: string;
-  icon?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface GameGroup {
   id: string;
-  name: string;
+  title: string;
   slug?: string;
   status?: number;
-  description?: string;
-  image?: string;
+  thumbnail?: string;
   categoryId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface GameAccount {
+  id: string;
+  thumb?: string;
+  images?: string[];
+  price: number;
+  groupId?: string;
+  description?: string;
+  details?: Record<string, string | number>;
+  status?: number;
   createdAt?: string;
   updatedAt?: string;
 }
 
 interface ApiResponse<T> {
   message: string;
-  result: T[]; 
+  result: T[];
+}
+
+interface SingleApiResponse<T> {
+  message: string;
+  result: T;
+}
+
+interface PaginationMeta {
+  total: number;
+  totalPages: number;
+  page: number;
+  limit: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+interface PaginatedApiResponse<T> {
+  message: string;
+  result: {
+    data: T[];
+    meta: PaginationMeta;
+  };
 }
 
 const AccountsApi = {
@@ -44,7 +75,27 @@ const AccountsApi = {
     const response = await publicApi.get<ApiResponse<GameGroup>>(
       GAME_ENDPOINTS.GET_GROUPS_BY_CATEGORY(categoryId),
     );
-    return response.data.result; 
+    return response.data.result;
+  },
+
+  // Lấy accounts theo groupId
+  getAccountsByGroup: async (
+    groupId: string,
+    page: number = 1,
+    limit: number = 5,
+  ): Promise<GameAccount[]> => {
+    const response = await publicApi.get<PaginatedApiResponse<GameAccount>>(
+      GAME_ENDPOINTS.GET_ACCOUNTS_BY_GROUP(groupId, page, limit),
+    );
+    return response.data.result.data;
+  },
+
+  // Lấy chi tiết account
+  getAccountDetail: async (accountId: string): Promise<GameAccount> => {
+    const response = await publicApi.get<SingleApiResponse<GameAccount>>(
+      GAME_ENDPOINTS.GET_ACCOUNT_DETAIL(accountId),
+    );
+    return response.data.result;
   },
 };
 

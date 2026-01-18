@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { useAccountsStore } from "~/store/useAccountsStore";
 
 interface GameGroupsProps {
@@ -7,14 +8,13 @@ interface GameGroupsProps {
 
 export default function GameGroups({ categoryId }: GameGroupsProps) {
   const { groups, isLoading, fetchGroupsByCategory } = useAccountsStore();
+  const navigate = useNavigate();
 
   const categoryGroups = groups[categoryId] || [];
 
   useEffect(() => {
     fetchGroupsByCategory(categoryId);
   }, [categoryId, fetchGroupsByCategory]);
-
-
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -48,7 +48,10 @@ export default function GameGroups({ categoryId }: GameGroupsProps) {
               </span>
             </div>
 
-            <button className="w-full border-2 border-blue-700 text-blue-700 font-semibold py-2 rounded-full hover:bg-blue-700 hover:text-white transition-colors uppercase text-sm">
+            <button
+              onClick={() => navigate(`/group-accounts/${group.id}`)}
+              className="w-full border-2 border-blue-700 text-blue-700 font-semibold py-2 rounded-full hover:bg-blue-700 hover:text-white transition-colors uppercase text-sm"
+            >
               Xem chi tiết
             </button>
           </div>

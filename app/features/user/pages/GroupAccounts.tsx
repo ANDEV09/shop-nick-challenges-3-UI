@@ -1,39 +1,37 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import UserHeader from "~/components/user/UserHeader";
 import UserTopBar from "~/components/user/UserTopBar";
 import AccountsFilter from "~/features/user/components/AccountsFilter";
 import { formatCurrency } from "~/lib/utils";
+import AccountsApi, {
+  type GameAccount,
+} from "~/api-requests/Accounts.requests";
+import UserFooter from "~/components/user/UserFooter";
 
 export default function Accounts() {
-  const accounts = [
-    {
-      id: 138,
-      image:
-        "https://meoroblox.com/storage/accounts/thumbnails/1766661370_a19ddbe22afc139c538bfca41cea40ad.png",
-      price: 180000,
-      cardPrice: 160000,
-    },
-    {
-      id: 138,
-      image:
-        "https://meoroblox.com/storage/accounts/thumbnails/1766661370_a19ddbe22afc139c538bfca41cea40ad.png",
-      price: 180000,
-      cardPrice: 160000,
-    },
-    {
-      id: 138,
-      image:
-        "https://meoroblox.com/storage/accounts/thumbnails/1766661370_a19ddbe22afc139c538bfca41cea40ad.png",
-      price: 180000,
-      cardPrice: 160000,
-    },
-    {
-      id: 138,
-      image:
-        "https://meoroblox.com/storage/accounts/thumbnails/1766661370_a19ddbe22afc139c538bfca41cea40ad.png",
-      price: 180000,
-      cardPrice: 160000,
-    },
-  ];
+  const { groupId } = useParams<{ groupId: string }>();
+  const navigate = useNavigate();
+  const [accounts, setAccounts] = useState<GameAccount[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const limit = 8;
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      if (!groupId) return;
+      setIsLoading(true);
+      try {
+        const data = await AccountsApi.getAccountsByGroup(groupId, page, limit);
+        setAccounts(data);
+      } catch (error) {
+        console.error("Error fetching accounts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAccounts();
+  }, [groupId, page]);
 
   return (
     <>
@@ -43,46 +41,62 @@ export default function Accounts() {
       <div className="min-h-screen bg-gray-100">
         <div className="w-full bg-blue-800 text-white py-6 px-4">
           <h1 className="text-3xl font-bold text-center">
-            Acc Blox Fruits Tự chọn
+            Danh sách tài khoản
           </h1>
-          <p className="text-center text-blue-100 text-sm mt-1">
-            Acc blox fruits 100% như hình Giá tự chọn
-          </p>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
           <AccountsFilter />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 cursor-pointer">
-            {accounts.map((account, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-2 transition-all duration-300"
-              >
-                <div className="relative bg-gray-200 h-48 overflow-hidden">
-                  <img
-                    src={account.image || "/placeholder.svg"}
-                    alt={`Account ${account.id}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
-                    Mã số: {account.id}
+
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Đang tải...</p>
+            </div>
+          ) : accounts.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Không có tài khoản nào</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ">
+              {accounts.map((account) => (
+                <div
+                  key={account.id}
+                  onClick={() => navigate(`/account-details/${account.id}`)}
+                  className="group bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="relative bg-gray-200 h-48 overflow-hidden">
+                    <img
+                      src={account.thumb || "/placeholder.svg"}
+                      alt={`Account ${account.id}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                      SALE
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex gap-2">
+                      <button className="flex-1 px-3 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 transition-colors text-xs">
+                        {formatCurrency(account.price)}
+                      </button>
+                      <button
+                        className="flex-1 px-3 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded hover:bg-blue-700 hover:text-white transition-colors text-xs cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/account-details/${account.id}`);
+                        }}
+                      >
+                        XEM CHI TIẾT
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div className="p-6">
-                  <div className="flex gap-2">
-                    <button className="flex-1 px-3 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 transition-colors text-xs">
-                      {formatCurrency(account.cardPrice)}
-                    </button>
-                    <button className="flex-1 px-3 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded hover:bg-blue-50 transition-colors text-xs">
-                      XEM CHI TIẾT
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+      <UserFooter />
     </>
   );
 }

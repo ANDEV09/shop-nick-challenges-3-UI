@@ -7,6 +7,6 @@ export default [
   route("profile/:tab", "features/user/pages/profile.tsx", {
     id: "profile-tab",
   }),
-  route("group-accounts", "features/user/pages/GroupAccounts.tsx"),
-  route("account-details", "features/user/pages/AccountDetails.tsx"),
+  route("group-accounts/:groupId", "features/user/pages/GroupAccounts.tsx"),
+  route("account-details/:accountId", "features/user/pages/AccountDetails.tsx"),
 ] satisfies RouteConfig;
