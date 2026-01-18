@@ -20,7 +20,6 @@ export default function AccountDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  // modal state is controlled here; animation handled inside component
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -138,18 +137,9 @@ export default function AccountDetails() {
 
                 <div>
                   <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-                    <h3 className="text-lg font-bold text-gray-800 mb-3">
+                    <h3 className="text-lg font-bold text-gray-800 mb-3 justify-center flex">
                       Thông tin tài khoản
                     </h3>
-
-                    <div className="mb-4 pb-4 border-b border-gray-300">
-                      <p className="text-xs text-gray-600 font-medium mb-1">
-                        Giá
-                      </p>
-                      <p className="text-2xl font-bold text-blue-600">
-                        {account.price} ₫
-                      </p>
-                    </div>
                     <div className="space-y-2">
                       {account.details ? (
                         Object.entries(account.details).map(([key, value]) => (

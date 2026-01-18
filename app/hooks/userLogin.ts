@@ -21,7 +21,8 @@ export const useLogin = () => {
         position: "bottom-right",
       });
       setUser(result.result.userInfo);
-      setTimeout(() => navigate("/"), 3000);
+      console.log("Logged in user:", result.result.userInfo);
+      setTimeout(() => navigate("/"), 1500);
 
       return result;
     } catch (err) {

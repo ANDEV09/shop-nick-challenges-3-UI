@@ -5,6 +5,7 @@ interface AuthUser {
   username: string;
   email: string;
   balance: number;
+  role: string;
 }
 
 interface AuthStore {
@@ -16,7 +17,6 @@ interface AuthStore {
 // Zustand
 
 export const useAuthStore = create<AuthStore>((set) => ({
-  
   authUser: null,
   isAuthenticated: false,
 

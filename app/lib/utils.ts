@@ -7,5 +7,5 @@ export function cn(...inputs: ClassValue[]) {
 
 export const formatCurrency = (amount: string | number): string => {
   const num = typeof amount === "string" ? parseInt(amount, 10) : amount;
-  return num.toLocaleString("vi-VN") + " VND";
+  return num.toLocaleString("vi-VN");
 };

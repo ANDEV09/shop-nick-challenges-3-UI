@@ -24,6 +24,7 @@ export interface UserInfoResponse {
   username: string;
   email: string;
   balance: number;
+  role: string;
 }
 export interface LoginResponse {
   message: string;
