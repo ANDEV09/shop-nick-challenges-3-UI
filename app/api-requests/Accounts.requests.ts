@@ -1,4 +1,4 @@
-import { publicApi } from "~/lib/axios-instance";
+import { publicApi, privateApi } from "~/lib/axios-instance";
 import { GAME_ENDPOINTS } from "~/constants/api.constants";
 
 export interface GameCategory {
@@ -32,6 +32,17 @@ export interface GameAccount {
   status?: number;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface PurchaseResponse {
+  message: string;
+  result: {
+    orderId: string;
+    accountId: string;
+    price: number;
+    status: string;
+    purchasedAt: string;
+  };
 }
 
 interface ApiResponse<T> {
@@ -96,6 +107,14 @@ const AccountsApi = {
       GAME_ENDPOINTS.GET_ACCOUNT_DETAIL(accountId),
     );
     return response.data.result;
+  },
+
+  // Mua account
+  purchaseAccount: async (accountId: string): Promise<PurchaseResponse> => {
+    const response = await privateApi.post<PurchaseResponse>(
+      GAME_ENDPOINTS.PURCHASE_ACCOUNT(accountId),
+    );
+    return response.data;
   },
 };
 

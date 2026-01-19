@@ -31,6 +31,7 @@ export const GAME_ENDPOINTS = {
     page: number = 1,
     limit: number = 5,
   ) => `/game-accounts/${groupId}?page=${page}&limit=${limit}`,
+  PURCHASE_ACCOUNT: (accountId: string) => `/game-accounts/${accountId}/purchase`,
 } as const;
 
 // ==================== UPLOAD ENDPOINTS ====================

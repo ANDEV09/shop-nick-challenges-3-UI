@@ -7,7 +7,14 @@ interface PurchaseAuthModalProps {
   price: number;
   title?: string;
   loginPath?: string;
+  depositCardPath?: string;
+  depositAtmPath?: string;
+  isAuthenticated: boolean;
+  balance?: number;
+  isPurchasing?: boolean;
+  error?: string | null;
   onClose: () => void;
+  onPurchase?: () => void;
 }
 
 export default function PurchaseAuthModal({
@@ -15,9 +22,19 @@ export default function PurchaseAuthModal({
   price,
   title = "XÁC NHẬN MUA TÀI KHOẢN",
   loginPath = "/login",
+  depositAtmPath = "#",
+  isAuthenticated,
+  balance = 0,
+  isPurchasing = false,
+  error = null,
   onClose,
+  onPurchase,
 }: PurchaseAuthModalProps) {
   const [visible, setVisible] = useState(false);
+
+  const missingAmount = Math.max(price - balance, 0);
+  const shouldTopUp = isAuthenticated && missingAmount > 0;
+  const readyToBuy = isAuthenticated && !shouldTopUp;
 
   useEffect(() => {
     if (open) {
@@ -32,6 +49,11 @@ export default function PurchaseAuthModal({
   const handleClose = () => {
     setVisible(false);
     setTimeout(() => onClose(), 200);
+  };
+
+  const handlePurchaseClick = () => {
+    onPurchase?.();
+    handleClose();
   };
 
   return (
@@ -61,9 +83,11 @@ export default function PurchaseAuthModal({
         <div className="p-6 space-y-4">
           <div className="bg-gray-50 border rounded-lg p-4">
             <div className="  mx-4 flex items-center gap-8">
-              <span className="text-sm font-semibold text-gray-700">Giá tiền:</span>
+              <span className="text-sm font-semibold text-gray-700">
+                Giá tiền:
+              </span>
               <span className="text-lg font-bold text-blue-600 mb-0.5">
-                {formatCurrency(price)}
+                {formatCurrency(price)} đ
               </span>
             </div>
           </div>
@@ -78,25 +102,76 @@ export default function PurchaseAuthModal({
             </button>
           </div>
 
-          <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg p-3">
-            Vui lòng đăng nhập để thực hiện giao dịch.
-          </div>
+          {!readyToBuy && (
+            <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg p-3">
+              {!isAuthenticated
+                ? "Vui lòng đăng nhập để thực hiện giao dịch."
+                : `Bạn cần thêm ${formatCurrency(missingAmount)} để mua tài khoản này. Vui lòng nạp thêm trước khi tiếp tục.`}
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
+              {error}
+            </div>
+          )}
         </div>
 
         <div className="px-6 pb-6 flex gap-3">
-          <Link
-            to={loginPath}
-            className="flex-3 text-center px-4 py-2 rounded-lg bg-gray-900 text-white font-semibold uppercase tracking-wide hover:bg-black transition"
-            onClick={handleClose}
-          >
-            Đăng nhập
-          </Link>
-          <button
-            className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-800 font-semibold uppercase tracking-wide hover:bg-gray-50 transition"
-            onClick={handleClose}
-          >
-            Đóng
-          </button>
+          {!isAuthenticated && (
+            <>
+              <Link
+                to={loginPath}
+                className="flex-3 text-center px-4 py-2 rounded-lg bg-gray-900 text-white font-semibold uppercase tracking-wide hover:bg-black transition"
+                onClick={handleClose}
+              >
+                Đăng nhập
+              </Link>
+              <button
+                className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-800 font-semibold uppercase tracking-wide hover:bg-gray-50 transition"
+                onClick={handleClose}
+              >
+                Đóng
+              </button>
+            </>
+          )}
+
+          {shouldTopUp && (
+            <>
+              <Link
+                to={depositAtmPath}
+                className="flex-3 text-center px-4 py-2 rounded-lg bg-gray-900 text-white font-semibold uppercase tracking-wide hover:bg-black transition"
+                onClick={handleClose}
+              >
+                Nạp ATM
+              </Link>
+              <button
+                className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-800 font-semibold uppercase tracking-wide hover:bg-gray-50 transition"
+                onClick={handleClose}
+              >
+                Đóng
+              </button>
+            </>
+          )}
+
+          {readyToBuy && (
+            <>
+              <button
+                className="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold uppercase tracking-wide hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handlePurchaseClick}
+                disabled={isPurchasing}
+              >
+                {isPurchasing ? "Đang xử lý..." : "Xác nhận mua"}
+              </button>
+              <button
+                className="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-800 font-semibold uppercase tracking-wide hover:bg-gray-50 transition disabled:opacity-50"
+                onClick={handleClose}
+                disabled={isPurchasing}
+              >
+                Đóng
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

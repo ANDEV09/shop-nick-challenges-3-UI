@@ -2,7 +2,8 @@
 
 import { CreditCard, Landmark, ShoppingCart } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 import AccountsApi, {
   type GameAccount,
 } from "~/api-requests/Accounts.requests";
@@ -10,16 +11,19 @@ import UserFooter from "~/components/user/UserFooter";
 import UserHeader from "~/components/user/UserHeader";
 import UserTopBar from "~/components/user/UserTopBar";
 import { useAuthStore } from "~/store/useAuthStore";
-import { formatCurrency } from "~/lib/utils";
 import PurchaseAuthModal from "~/components/user/PurchaseAuthModal";
 
 export default function AccountDetails() {
+  const navigate = useNavigate();
   const { accountId } = useParams<{ accountId: string }>();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, authUser, updateBalance } = useAuthStore();
   const [account, setAccount] = useState<GameAccount | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
+  const balance = authUser?.balance ?? 0;
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -44,12 +48,37 @@ export default function AccountDetails() {
     return [];
   }, [account]);
 
-  const handleBuyClick = () => {
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-      return;
+  const handleBuyClick = () => setShowAuthModal(true);
+
+  const handleConfirmPurchase = async () => {
+    if (!accountId || !account) return;
+
+    setIsPurchasing(true);
+    setPurchaseError(null);
+
+    try {
+      const response = await AccountsApi.purchaseAccount(accountId);
+      closeAuthModal();
+      
+      // Cập nhật balance sau khi mua thành công
+      const newBalance = balance - account.price;
+      updateBalance(newBalance);
+      
+      toast.success(`Mua tài khoản thành công!`);
+
+      setTimeout(() => {
+        navigate("/profile/purchased-accounts");
+      }, 2000);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Mua tài khoản thất bại. Vui lòng thử lại sau.";
+      setPurchaseError(errorMessage);
+      toast.error(errorMessage);
+      console.error("Purchase error:", error);
+    } finally {
+      setIsPurchasing(false);
     }
-    // TODO: implement purchase flow
   };
 
   const closeAuthModal = () => setShowAuthModal(false);
@@ -172,6 +201,10 @@ export default function AccountDetails() {
         open={showAuthModal}
         price={account?.price ?? 0}
         title={"XÁC NHẬN MUA TÀI KHOẢN"}
+        isAuthenticated={isAuthenticated}
+        balance={balance}
+        isPurchasing={isPurchasing}
+        onPurchase={handleConfirmPurchase}
         onClose={closeAuthModal}
       />
       <UserFooter />
