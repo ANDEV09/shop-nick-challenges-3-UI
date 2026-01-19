@@ -4,7 +4,15 @@ import AuthApi from "~/api-requests/auth.requests";
 import { useAuthStore } from "~/store/useAuthStore";
 
 export default function UserHeader() {
-  const { isAuthenticated, authUser } = useAuthStore();
+  const { isAuthenticated, authUser, setUser } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await AuthApi.logout();
+    } finally {
+      setUser(null);
+    }
+  };
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -22,44 +30,42 @@ export default function UserHeader() {
             <li>
               <Link
                 to="/"
-                className="relative pb-1 font-semibold transition-colors text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-full"
+                className="relative pb-1 font-semibold text-blue-600 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-blue-600"
               >
                 TRANG CHỦ
               </Link>
             </li>
+
             <li>
-              <a
-                href="#"
-                className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
-              >
+              <a className="relative pb-1 font-semibold text-gray-800 hover:text-blue-600">
                 NẠP TIỀN
               </a>
             </li>
+
             <li>
-              <a
-                href="#"
-                className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
-              >
+              <a className="relative pb-1 font-semibold text-gray-800 hover:text-blue-600">
                 LIÊN HỆ ADMIN
               </a>
             </li>
+
             {isAuthenticated && (
               <li>
                 <Link
                   to="/staff"
-                  className="relative pb-1 font-semibold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+                  className="relative pb-1 font-semibold text-gray-800 hover:text-blue-600"
                 >
                   ĐĂNG BÁN TÀI KHOẢN
                 </Link>
               </li>
             )}
+
             {isAuthenticated && authUser?.role === "ADMIN" && (
               <li>
                 <Link
                   to="/admin"
-                  className="relative pb-1 font-bold transition-colors text-gray-800 hover:text-blue-600 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:w-0 hover:after:w-full"
+                  className="relative pb-1 font-bold text-gray-800 hover:text-blue-600"
                 >
-                  ADMIN PANNEL
+                  ADMIN PANEL
                 </Link>
               </li>
             )}
@@ -70,32 +76,31 @@ export default function UserHeader() {
           {isAuthenticated ? (
             <>
               <span className="font-semibold text-sm">
-                {authUser?.username} - {authUser?.balance.toLocaleString()}đ
+                {authUser?.username} – {authUser?.balance.toLocaleString()}đ
               </span>
+
               <button
-                onClick={() => {
-                  useAuthStore.getState().setUser(null);
-                  AuthApi.logout();
-                }}
-                className="flex items-center font-semibold gap-2 px-3 py-1.5 text-sm border border-red-600 rounded-md bg-red-700 text-white transition"
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold border border-red-600 rounded-md bg-red-700 text-white"
               >
-                <User size={14} className="mb-1" /> ĐĂNG XUẤT
+                <User size={14} /> ĐĂNG XUẤT
               </button>
             </>
           ) : (
             <>
               <Link
                 to="/login"
-                className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-700 hover:text-white transition"
+                className="flex items-center gap-2 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-700 hover:text-white"
               >
-                <User size={16} className="mb-1" />
-                <span className="font-semibold text-sm ">ĐĂNG NHẬP</span>
+                <User size={16} />
+                <span className="font-semibold text-sm">ĐĂNG NHẬP</span>
               </Link>
+
               <Link
                 to="/register"
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
-                <Key size={16} className="mb-1" />
+                <Key size={16} />
                 <span className="font-semibold text-sm">ĐĂNG KÝ</span>
               </Link>
             </>

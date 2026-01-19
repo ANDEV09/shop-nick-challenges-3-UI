@@ -12,11 +12,13 @@ interface AuthUser {
 interface AuthStore {
   authUser: AuthUser | null;
   isAuthenticated: boolean;
+
   setUser: (user: AuthUser | null) => void;
+  updateUser: (data: Partial<AuthUser>) => void;
+  updateBalance: (balance: number) => void;
 }
 
 // Zustand
-
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
@@ -28,6 +30,16 @@ export const useAuthStore = create<AuthStore>()(
           authUser: user,
           isAuthenticated: Boolean(user),
         }),
+
+      updateUser: (data) =>
+        set((state) => ({
+          authUser: state.authUser ? { ...state.authUser, ...data } : null,
+        })),
+
+      updateBalance: (balance) =>
+        set((state) => ({
+          authUser: state.authUser ? { ...state.authUser, balance } : null,
+        })),
     }),
     {
       name: "auth-store",
