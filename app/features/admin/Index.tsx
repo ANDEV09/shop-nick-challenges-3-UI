@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Outlet } from "react-router";
 import AdminDashboard from "~/features/admin/components/AdminDashboard";
 import AdminHeader from "~/features/admin/components/AdminHeader";
 import AdminSidebar from "~/features/admin/components/AdminSidebar";
@@ -12,7 +13,9 @@ export default function CtvPage() {
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <AdminHeader />
-        <AdminDashboard />
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

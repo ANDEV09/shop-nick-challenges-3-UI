@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { Outlet } from "react-router";
 import StaffHeader from "~/features/ctv/components/StaffHeader";
 import StaffSidebar from "~/features/ctv/components/StaffSidebar";
-import StaffDashboard from "~/features/ctv/components/StaffDashboard";
 
 export default function CtvPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -12,7 +12,9 @@ export default function CtvPage() {
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <StaffHeader />
-        <StaffDashboard />
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
