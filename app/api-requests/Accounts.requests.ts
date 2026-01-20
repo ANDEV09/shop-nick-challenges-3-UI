@@ -1,88 +1,15 @@
 import { publicApi, privateApi } from "~/lib/axios-instance";
 import { GAME_ENDPOINTS } from "~/constants/api.constants";
-
-export interface GameCategory {
-  id: string;
-  name: string;
-  slug?: string;
-  status?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface GameGroup {
-  id: string;
-  title: string;
-  slug?: string;
-  status?: number;
-  thumbnail?: string;
-  categoryId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface GameAccount {
-  id: string;
-  thumb?: string;
-  images?: string[];
-  price: number;
-  groupId?: string;
-  description?: string;
-  details?: Record<string, string | number>;
-  status?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface PurchaseResponse {
-  message: string;
-  result: {
-    orderId: string;
-    accountId: string;
-    price: number;
-    status: string;
-    purchasedAt: string;
-  };
-}
-
-interface ApiResponse<T> {
-  message: string;
-  result: T[];
-}
-
-interface SingleApiResponse<T> {
-  message: string;
-  result: T;
-}
-
-interface PaginationMeta {
-  total: number;
-  totalPages: number;
-  page: number;
-  limit: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
-
-interface PaginatedApiResponse<T> {
-  message: string;
-  result: {
-    data: T[];
-    meta: PaginationMeta;
-  };
-}
-
-export interface PurchasedAccount {
-  id: string;
-  accountName?: string;
-  password?: string;
-  price: number;
-  status?: number;
-  thumb?: string;
-  images?: string | string[];
-  details?: Record<string, string | number>;
-  updatedAt?: string;
-}
+import type {
+  GameCategory,
+  GameGroup,
+  GameAccount,
+  PurchaseResponse,
+  PurchasedAccount,
+  ApiResponse,
+  SingleApiResponse,
+  PaginatedApiResponse,
+} from "~/types/accounts.types";
 
 const AccountsApi = {
   // Lấy tất cả categories
@@ -139,5 +66,16 @@ const AccountsApi = {
     return [];
   },
 };
+
+export type {
+  GameCategory,
+  GameGroup,
+  GameAccount,
+  PurchaseResponse,
+  PurchasedAccount,
+  ApiResponse,
+  SingleApiResponse,
+  PaginatedApiResponse,
+} from "~/types/accounts.types";
 
 export default AccountsApi;

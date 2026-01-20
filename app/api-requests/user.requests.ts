@@ -27,4 +27,10 @@ const UserApi = {
   },
 };
 
+export type {
+  UserResponse,
+  PasswordResetResponse,
+  ForgotPasswordResponse,
+} from "~/types/user.types";
+
 export default UserApi;

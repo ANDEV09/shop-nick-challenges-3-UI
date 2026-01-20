@@ -1,46 +1,13 @@
 import { privateApi, publicApi } from "~/lib/axios-instance";
 import { AUTH_ENDPOINTS } from "~/constants/api.constants";
 import CookieStorage from "~/lib/cookie-storage";
-import type { A } from "node_modules/react-router/dist/development/router-5iOvts3c.mjs";
-
-export interface LoginPayload {
-  username: string;
-  password: string;
-}
-
-export interface RegisterPayload {
-  username: string;
-  email: string;
-  password: string;
-  confirm_password: string;
-}
-
-export interface RegisterResponse {
-  message: string;
-}
-
-export interface UserInfoResponse {
-  id: string;
-  username: string;
-  email: string;
-  balance: number;
-  role: string;
-  totalDeposited: number;
-  createdAt: string;
-}
-export interface LoginResponse {
-  message: string;
-  result: {
-    userInfo: UserInfoResponse;
-    access_token: string;
-    refresh_token: string;
-  };
-}
-
-export interface RefreshTokenResponse {
-  access_token: string;
-  refresh_token: string;
-}
+import type {
+  LoginPayload,
+  LoginResponse,
+  RegisterPayload,
+  RegisterResponse,
+  RefreshTokenResponse,
+} from "~/types/auth.types";
 
 const AuthApi = {
   login: async (payload: LoginPayload): Promise<LoginResponse> => {
@@ -101,5 +68,13 @@ const AuthApi = {
     }
   },
 };
+
+export type {
+  LoginPayload,
+  LoginResponse,
+  RegisterPayload,
+  RegisterResponse,
+  RefreshTokenResponse,
+} from "~/types/auth.types";
 
 export default AuthApi;
