@@ -11,13 +11,15 @@ export default [
   route("account-details/:accountId", "features/user/pages/AccountDetails.tsx"),
 
   route("staff", "features/ctv/Index.tsx", [
-    // route("my-accounts", "features/ctv/pages/MyAccounts.tsx"),
+    index("features/ctv/pages/Dashboard.tsx"),
+    route("game-categories", "features/ctv/pages/StaffCategories.tsx"),
     // route("sales", "features/ctv/pages/Sales.tsx"),
   ]),
 
   route("admin", "features/admin/Index.tsx", [
+    index("features/admin/pages/Dashboard.tsx"),
+    route("/admin/game-categories", "features/admin/pages/AdminCategories.tsx"),
     // route("game-accounts", "features/admin/pages/GameAccounts.tsx"), // /admin/game-accounts
-    // route("categories", "features/admin/pages/Categories.tsx"), // /admin/categories
     // route("users", "features/admin/pages/Users.tsx"), // /admin/users
   ]),
 ] satisfies RouteConfig;
