@@ -13,6 +13,8 @@ export default [
   route("staff", "features/ctv/Index.tsx", [
     index("features/ctv/pages/Dashboard.tsx"),
     route("game-categories", "features/ctv/pages/StaffCategories.tsx"),
+    route("game-groups", "features/ctv/pages/StaffGroups.tsx"),
+    route("game-accounts", "features/ctv/pages/StaffAccounts.tsx"),
     // route("sales", "features/ctv/pages/Sales.tsx"),
   ]),
 
