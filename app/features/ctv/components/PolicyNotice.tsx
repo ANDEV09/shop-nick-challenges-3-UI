@@ -1,6 +1,6 @@
 export default function PolicyNotice() {
   return (
-    <div className="rounded-sm border border-blue-100 bg-white shadow-sm">
+    <div className="rounded-sm border border-blue-100 bg-white shadow-sm max-h-100">
       <div className="border-b border-blue-100 px-6 py-4 flex items-center gap-2">
         <div className="h-8 w-1 rounded-full bg-blue-500" aria-hidden />
         <div>
