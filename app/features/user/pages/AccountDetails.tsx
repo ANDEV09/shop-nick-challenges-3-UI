@@ -24,6 +24,7 @@ export default function AccountDetails() {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const balance = authUser?.balance ?? 0;
+  const isPurchased = account?.status === 1;
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -59,11 +60,11 @@ export default function AccountDetails() {
     try {
       const response = await AccountsApi.purchaseAccount(accountId);
       closeAuthModal();
-      
+
       // Cập nhật balance sau khi mua thành công
       const newBalance = balance - account.price;
       updateBalance(newBalance);
-      
+
       toast.success(`Mua tài khoản thành công!`);
 
       setTimeout(() => {
@@ -97,23 +98,25 @@ export default function AccountDetails() {
             </p>
           ) : (
             <>
-              <div className="flex gap-4 justify-center mb-8">
-                <button
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-blue-700 transition shadow-md"
-                  onClick={handleBuyClick}
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  MUA NGAY
-                </button>
-                <button className="border-2 border-gray-800 text-gray-800 px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-50 transition">
-                  <CreditCard className="w-5 h-5" />
-                  NẠP THẺ
-                </button>
-                <button className="border-2 border-gray-800 text-gray-800 px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-50 transition">
-                  <Landmark className="w-5 h-5" />
-                  NẠP ATM
-                </button>
-              </div>
+              {!isPurchased && (
+                <div className="flex gap-4 justify-center mb-8">
+                  <button
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-blue-700 transition shadow-md"
+                    onClick={handleBuyClick}
+                  >
+                    <ShoppingCart className="w-5 h-5" />
+                    MUA NGAY
+                  </button>
+                  <button className="border-2 border-gray-800 text-gray-800 px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-50 transition">
+                    <CreditCard className="w-5 h-5" />
+                    NẠP THẺ
+                  </button>
+                  <button className="border-2 border-gray-800 text-gray-800 px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-50 transition">
+                    <Landmark className="w-5 h-5" />
+                    NẠP ATM
+                  </button>
+                </div>
+              )}
 
               <div className="bg-gray-50 border-l-4 border-gray-300 p-4 mb-8 rounded">
                 <p className="text-gray-700">

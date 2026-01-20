@@ -1,13 +1,13 @@
 import { Wallet, X, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { formatCurrency, formatDateTime } from "~/lib/utils";
 import AccountsApi, {
   type PurchasedAccount,
 } from "~/api-requests/Accounts.requests";
 
 export default function AccountHistories() {
-  const [selectedAccount, setSelectedAccount] =
-    useState<PurchasedAccount | null>(null);
+  const navigate = useNavigate();
   const [visiblePasswords, setVisiblePasswords] = useState<Set<number>>(
     new Set(),
   );
@@ -94,7 +94,7 @@ export default function AccountHistories() {
                   key={account.id ?? index}
                   className="border-b hover:bg-gray-50"
                 >
-                  <td className="px-6 py-4 text-sm text-gray-700">
+                  <td className="px-6 py-4 text-sm text-gray-700 font-semibold">
                     {formatDateTime(account.updatedAt)}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700">
@@ -124,13 +124,16 @@ export default function AccountHistories() {
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {formatCurrency(account.price)}
+                  <td className="px-6 py-4 font-semibold text-sm text-red-600">
+                    {formatCurrency(account.price)} đ
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700">
                     <button
-                      onClick={() => setSelectedAccount(account)}
-                      className="text-blue-600 hover:underline"
+                      onClick={() =>
+                        account.id && navigate(`/account-details/${account.id}`)
+                      }
+                      className="ml-1 px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-2xl hover:bg-blue-700 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500"
+                      disabled={!account.id}
                     >
                       Chi tiết
                     </button>
