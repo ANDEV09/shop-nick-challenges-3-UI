@@ -1,7 +1,8 @@
 "use client";
 
 import { CreditCard, Landmark, ShoppingCart } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { parseImages } from "~/lib/utils";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import AccountsApi, {
@@ -43,11 +44,7 @@ export default function AccountDetails() {
     fetchAccount();
   }, [accountId]);
 
-  const images = useMemo(() => {
-    if (!account) return [] as string[];
-    if (Array.isArray(account.images)) return account.images;
-    return [];
-  }, [account]);
+  const images = account ? parseImages(account.images) : [];
 
   const handleBuyClick = () => setShowAuthModal(true);
 
