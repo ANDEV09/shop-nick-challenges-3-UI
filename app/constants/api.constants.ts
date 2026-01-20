@@ -25,13 +25,16 @@ export const USER_ENDPOINTS = {
 export const GAME_ENDPOINTS = {
   GET_CATEGORIES: "/game-categories",
   GET_GROUPS_BY_CATEGORY: (categoryId: string) => `/game-groups/${categoryId}`,
-  GET_ACCOUNT_DETAIL: (accountId: string) => `/game-accounts/detail/${accountId}`,
+  GET_ACCOUNT_DETAIL: (accountId: string) =>
+    `/game-accounts/detail/${accountId}`,
   GET_ACCOUNTS_BY_GROUP: (
     groupId: string,
     page: number = 1,
     limit: number = 5,
   ) => `/game-accounts/${groupId}?page=${page}&limit=${limit}`,
-  PURCHASE_ACCOUNT: (accountId: string) => `/game-accounts/${accountId}/purchase`,
+  PURCHASE_ACCOUNT: (accountId: string) =>
+    `/game-accounts/${accountId}/purchase`,
+  GET_MY_PURCHASED: "/game-accounts/my-purchased",
 } as const;
 
 // ==================== UPLOAD ENDPOINTS ====================

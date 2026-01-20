@@ -7,6 +7,8 @@ interface AuthUser {
   email: string;
   balance: number;
   role: string;
+  totalDeposited: number;
+  createdAt: string;
 }
 
 interface AuthStore {

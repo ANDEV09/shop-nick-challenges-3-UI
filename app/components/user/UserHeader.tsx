@@ -75,9 +75,13 @@ export default function UserHeader() {
         <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <>
-              <span className="font-semibold text-sm">
-                {authUser?.username} – {authUser?.balance.toLocaleString()}đ
-              </span>
+              <Link
+                to="/profile/profile-info"
+                className="font-semibold text-sm hover:text-blue-600"
+              >
+                {authUser?.username} –{" "}
+                {(Number(authUser?.balance) || 0).toLocaleString("vi-VN")}đ
+              </Link>
 
               <button
                 onClick={handleLogout}
