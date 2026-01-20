@@ -72,6 +72,18 @@ interface PaginatedApiResponse<T> {
   };
 }
 
+export interface PurchasedAccount {
+  id: string;
+  accountName?: string;
+  password?: string;
+  price: number;
+  status?: number;
+  thumb?: string;
+  images?: string | string[];
+  details?: Record<string, string | number>;
+  updatedAt?: string;
+}
+
 const AccountsApi = {
   // Lấy tất cả categories
   getCategories: async (): Promise<GameCategory[]> => {
@@ -115,6 +127,16 @@ const AccountsApi = {
       GAME_ENDPOINTS.PURCHASE_ACCOUNT(accountId),
     );
     return response.data;
+  },
+
+  getMyPurchasedAccounts: async (): Promise<PurchasedAccount[]> => {
+    const res = await privateApi.get<PaginatedApiResponse<PurchasedAccount>>(
+      GAME_ENDPOINTS.GET_MY_PURCHASED,
+    );
+    const data = res.data.result;
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray((data as any).data)) return (data as any).data;
+    return [];
   },
 };
 
