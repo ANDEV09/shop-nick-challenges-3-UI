@@ -84,12 +84,7 @@ export default function CtvSidebar({
   setCurrentPage,
 }: CtvSidebarProps) {
   const [gameMenuOpen, setGameMenuOpen] = useState(false);
-  const [serviceMenuOpen, setServiceMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    console.log("Logout clicked");
-  };
 
   return (
     <div
@@ -100,7 +95,6 @@ export default function CtvSidebar({
           <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
             <BarChart3 size={18} className="text-blue-900" />
           </div>
-          {sidebarOpen && <span className="text-sm font-bold">Logo</span>}
         </div>
         <Menu
           size={20}
@@ -113,7 +107,7 @@ export default function CtvSidebar({
         <MenuItem
           icon={Home}
           label="Bảng Điều Khiển"
-          onClick={() => navigate("/user-ctv")}
+          onClick={() => navigate("/staff")}
         />
       </div>
       <div className="p-4">
@@ -127,48 +121,21 @@ export default function CtvSidebar({
         >
           <SubMenuItem
             label="Danh mục game"
-            onClick={() => navigate("/admin/game-categories")}
+            onClick={() => navigate("/staff/game-categories")}
           />
           <SubMenuItem
             label="Lịch sử mua nick"
-            onClick={() => navigate("/admin/purchase-history")}
+            onClick={() => navigate("/staff/purchase-history")}
           />
         </MenuItem>
       </div>
-      <div className="p-4">
-        <div className="mb-3 text-xs font-bold text-blue-300">
-          SYSTEM SETTINGS
-        </div>
-        <MenuItem icon={FileText} label="Danh Sách Ghim" />
-        <MenuItem icon={Settings} label="Cài Đặt Hệ Thống" />
-        <MenuItem icon={Lock} label="Cấu Hình API Keys" />
-        <MenuItem icon={AlertCircle} label="Cài Đặt Thông Báo" />
-      </div>
-      <div className="border-b border-blue-800 p-4">
-        <div className="mb-3 text-xs font-bold text-blue-300">
-          USERS MANAGER
-        </div>
-        <MenuItem icon={Users} label="Quản Lý Thành Viên" />
-        <MenuItem icon={CreditCard} label="Thống Tin Nạp Tiền" />
-        <MenuItem icon={LogBook} label="Lịch Sử Giao Dịch" />
-        <MenuItem icon={BarChart3} label="Lịch Sử Hoạt Động" />
-        <MenuItem icon={FileText} label="Lịch Sử Nạp Thẻ Cào" />
-        <MenuItem icon={CreditCard} label="Lịch Sử Nạp Tiền Bank" />
-      </div>
-      <div className="p-4">
-        <div className="mb-3 text-xs font-bold text-blue-300">
-          STAFF MANAGER
-        </div>
-        <MenuItem icon={MessageSquare} label="Yêu Cầu Rút Tiền" badge="9" />
-        <MenuItem
-          icon={FileText}
-          label="Quản Lý Chuyên Mục"
-          onClick={() => setCurrentPage?.("category")}
-        />
-      </div>
       <div className="flex-1"></div>
       <div className="border-t border-blue-800 p-4">
-        <MenuItem icon={LogOut} label="Đăng Xuất" onClick={handleLogout} />
+        <MenuItem
+          icon={LogOut}
+          label="Quay về trang chủ"
+          onClick={() => navigate("/")}
+        />
       </div>
     </div>
   );
