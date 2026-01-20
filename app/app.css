@@ -182,3 +182,17 @@ body {
   background: linear-gradient(135deg, hsl(38 92% 50%), hsl(32 95% 44%));
   color: #111;
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.animate-marquee {
+  display: inline-block;
+  min-width: 100%;
+  animation: marquee 18s linear infinite;
+}

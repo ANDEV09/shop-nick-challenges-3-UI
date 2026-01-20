@@ -9,11 +9,11 @@ export default function UserHero() {
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:items-stretch">
       <div className="flex-1">
-        <div className="relative rounded-2xl overflow-hidden h-full min-h-100">
+        <div className="relative rounded-2xl overflow-hidden h-full min-h-70 shadow-md">
           <img
             src="https://meoroblox.com/storage/config/1746807943_47f346a87c0b8825693c5923ed6f81d1.png"
             alt="MEOROBLOX.COM Banner"
-            className="w-full h-full object-cover"
+            className="w-full h-full max-h-115"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
         </div>
