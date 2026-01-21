@@ -65,6 +65,17 @@ const AccountsApi = {
     if (data && Array.isArray((data as any).data)) return (data as any).data;
     return [];
   },
+
+  // Lấy danh sách tài khoản đã đăng bán của tôi
+  getMySellingAccounts: async (): Promise<GameAccount[]> => {
+    const res = await privateApi.get<PaginatedApiResponse<GameAccount>>(
+      "/game-accounts/my-selling"
+    );
+    const data = res.data.result;
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray((data as any).data)) return (data as any).data;
+    return [];
+  },
 };
 
 export type {

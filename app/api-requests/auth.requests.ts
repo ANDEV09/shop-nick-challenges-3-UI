@@ -10,6 +10,10 @@ import type {
 } from "~/types/auth.types";
 
 const AuthApi = {
+  getMe: async () => {
+    const response = await privateApi.get("/users/profile");
+    return response.data;
+  },
   login: async (payload: LoginPayload): Promise<LoginResponse> => {
     const response = await publicApi.post<LoginResponse>(
       AUTH_ENDPOINTS.LOGIN,
