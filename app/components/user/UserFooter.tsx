@@ -10,12 +10,11 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
-import { Link } from "react-router";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-white relative z-10 mt-12">
-      <div className="absolute inset-0 bg-slate-900 -mt-2 z-0"></div>
+    <footer className="bg-slate-900 text-white z-10 mt-12">
+      <div className=" bg-slate-900 -mt-2 absolute z-0"></div>
       <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
@@ -170,26 +169,26 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-700">
+      <div className="border-t border-gray-700 mt-4">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <p className="text-center text-gray-400 text-sm">
             © 2026 - Bản quyền thuộc về{" "}
             <a
-              href="https://meoroblox.com"
-              className="text-yellow-400 hover:underline font-semibold"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              MEOROBLOX.COM
-            </a>{" "}
-            - Thiết kế bởi{" "}
-            <a
               href="https://tuanori.vn"
-              className="text-pink-500 hover:underline font-semibold"
+              className="text-pink-400 hover:underline font-semibold"
               target="_blank"
               rel="noopener noreferrer"
             >
               TUANORI.VN
+            </a>{" "}
+            - Thiết kế bởi{" "}
+            <a
+              href="https://tuanori.vn"
+              className="text-pink-400 hover:underline font-bold"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Phạm Hoàng Tuấn
             </a>
           </p>
         </div>
