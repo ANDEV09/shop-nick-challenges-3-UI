@@ -124,7 +124,7 @@ export default function CtvSidebar({
             onClick={() => navigate("/staff/game-categories")}
           />
           <SubMenuItem
-            label="Lịch sử mua nick"
+            label="Lịch sử nick đã bán"
             onClick={() => navigate("/staff/purchase-history")}
           />
         </MenuItem>

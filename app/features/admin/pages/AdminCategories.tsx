@@ -1,9 +1,17 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Pencil, Trash } from "lucide-react";
+import { formatDateTime } from "~/lib/utils";
+import { useAccountsStore } from "~/store/useAccountsStore";
+import { Link } from "react-router-dom";
 
-export default function AdminCategoriesPage() {
+export default function AdminCategories() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [, setCurrentTablePage] = useState(1);
+  const { categories, isLoading, fetchCategories } = useAccountsStore();
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
@@ -37,53 +45,84 @@ export default function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="mb-6 overflow-x-auto">
+        <div className="mb-3 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  #
+                  STT
                 </th>
                 <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Ưu tiên
+                  TÊN CHUYÊN MỤC
                 </th>
                 <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Thao tác
+                  NGÀY TẠO
                 </th>
                 <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Tên chuyên mục
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Số nhóm con
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Người tạo
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Trạng thái
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                  Thời gian
+                  THAO TÁC
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan={8} className="py-8 text-center text-gray-500">
-                  No data available in table
-                </td>
-              </tr>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-gray-500">
+                    Đang tải danh mục...
+                  </td>
+                </tr>
+              ) : categories.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="py-8 text-center text-gray-400 italic"
+                  >
+                    Không có danh mục nào
+                  </td>
+                </tr>
+              ) : (
+                categories.map((cat, idx) => (
+                  <tr
+                    key={cat.id}
+                    className="border-b border-gray-100 hover:bg-gray-50"
+                  >
+                    <td className="px-4 py-3">
+                      <span className="bg-red-600 text-white text-xs px-2 py-1 rounded font-bold ml-1">
+                        {idx + 1}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="font-bold text-red-600 text-base tracking-wide capitalize ml-5">
+                        {cat.name}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="bg-black text-white text-xs px-2 py-1 rounded font-bold">
+                        {formatDateTime(cat.createdAt)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 flex gap-2">
+                      <button className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold">
+                        <Pencil size={14} />
+                      </button>
+                      <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold">
+                        <Trash size={14} />
+                      </button>
+                      <Link
+                        to={`/admin/game-groups?categoryId=${cat.id}`}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-2 rounded text-xs font-bold inline-block text-center"
+                      >
+                        XEM NHÓM
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
+            <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700 mt-6  ">
+              <Plus size={18} />
+              Thêm danh mục mới
+            </button>
           </table>
-        </div>
-
-        
-
-        <div className="mt-6">
-          <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700">
-            <Plus size={18} />
-            Thêm chuyên mục mới
-          </button>
         </div>
       </div>
     </div>

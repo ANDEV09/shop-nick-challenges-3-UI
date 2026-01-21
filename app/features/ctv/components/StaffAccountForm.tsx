@@ -106,8 +106,8 @@ export const StaffAccountForm: React.FC<StaffAccountFormProps> = ({
             onChange={(urls) =>
               setFormData((prev: any) => ({ ...prev, thumb: urls[0] }))
             }
-            uploadPreset="unsigned_preset"
-            cloudName="dzipftaf1"
+            uploadPreset={import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET}
+            cloudName={import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}
           />
           <input type="hidden" name="thumb" value={formData.thumb} readOnly />
         </div>
@@ -122,8 +122,8 @@ export const StaffAccountForm: React.FC<StaffAccountFormProps> = ({
                 images: urls.filter((u: string) => !!u),
               }))
             }
-            uploadPreset="unsigned_preset"
-            cloudName="dzipftaf1"
+            uploadPreset={import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET}
+            cloudName={import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}
           />
         </div>
         <div>
