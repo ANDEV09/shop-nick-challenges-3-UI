@@ -21,7 +21,8 @@ export default [
   route("admin", "features/admin/Index.tsx", [
     index("features/admin/pages/Dashboard.tsx"),
     route("/admin/game-categories", "features/admin/pages/AdminCategories.tsx"),
-    // route("game-accounts", "features/admin/pages/GameAccounts.tsx"), // /admin/game-accounts
+    route("/admin/game-groups", "features/admin/pages/AdminGroups.tsx"),
+    route("/admin/game-accounts", "features/admin/pages/AdminAccounts.tsx"),
     // route("users", "features/admin/pages/Users.tsx"), // /admin/users
   ]),
 ] satisfies RouteConfig;
