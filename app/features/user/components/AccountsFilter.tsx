@@ -1,10 +1,29 @@
 import { useState } from "react";
 import { Search, RotateCcw } from "lucide-react";
 
-export default function AccountsFilter() {
+interface AccountsFilterProps {
+  onFilter: (filters: {
+    accountId: string;
+    priceFilter: string;
+    statusFilter: string;
+  }) => void;
+}
+
+export default function AccountsFilter({ onFilter }: AccountsFilterProps) {
   const [accountId, setAccountId] = useState("");
   const [priceFilter, setPriceFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+
+  const handleSearch = () => {
+    onFilter({ accountId, priceFilter, statusFilter });
+  };
+
+  const handleReset = () => {
+    setAccountId("");
+    setPriceFilter("all");
+    setStatusFilter("all");
+    onFilter({ accountId: "", priceFilter: "all", statusFilter: "all" });
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
@@ -55,12 +74,16 @@ export default function AccountsFilter() {
       </div>
 
       <div className="flex gap-4 justify-end">
-        <button className="px-4 py-1.5 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm">
-          <Search size={16} />
+        <button
+          className="px-4 py-1.5 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
+          onClick={handleSearch}
+        >
           TÌM KIẾM
         </button>
-        <button className="px-4 py-1.5 bg-white border-2 border-blue-600 text-blue-600 font-semibold rounded hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm">
-          <RotateCcw size={16} />
+        <button
+          className="px-4 py-1.5 bg-white border-2 border-blue-600 text-blue-600 font-semibold rounded hover:bg-blue-50 transition-colors flex items-center gap-2 text-sm"
+          onClick={handleReset}
+        >
           ĐẶT LẠI
         </button>
       </div>

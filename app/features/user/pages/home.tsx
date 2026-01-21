@@ -63,7 +63,7 @@ export default function Home() {
           <div className="mt-6 bg-green-50 border-l-4 border-green-400 rounded-lg p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Info size={16} className="text-green-700 mb-0.5" />
-              <p className="text-green-700 font-medium">
+              <p className="text-green-700 font-medium text-sm">
                 Chào mừng bạn đến với Shop Bán Acc Game của chúng tôi. Nạp
                 ATM/Momo khuyến mãi 10%, Nạp thẻ cào nhận 100% giá trị thẻ nạp
                 !!
@@ -79,20 +79,23 @@ export default function Home() {
         )}
 
         <div className="mt-6 bg-white rounded-2xl shadow-md p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock size={20} className="text-blue-600 mb-1" />
-            <h2 className="text-blue-600 font-bold text-lg">
-              Giao Dịch Gần Đây
-            </h2>
+          <div className="flex flex-col gap-0.5 mb-2">
+            <div className="flex items-center gap-2">
+              <Clock size={20} className="text-blue-600 mb-1" />
+              <h2 className="text-blue-600 font-bold text-base">
+                Giao Dịch Gần Đây
+              </h2>
+            </div>
+            <div className="w-full h-px bg-gray-100 mt-1" />
           </div>
           <div className="overflow-x-hidden w-full">
-            <div className="whitespace-nowrap animate-marquee font-semibold text-base">
+            <div className="whitespace-nowrap animate-marquee font-semibold text-sm">
               {FAKE_TRANSACTIONS.map((item, idx) => (
                 <span key={idx} className="inline-block mx-2 gap-2">
                   <span className="text-blue-700">
                     {item.user.slice(0, 5) + "*".repeat(item.user.length - 5)}
                   </span>{" "}
-                  <span className="text-black font-normal text-sm">
+                  <span className="text-black font-normal text-xs">
                     {item.action}
                   </span>{" "}
                   <span className="text-blue-700">{item.price}</span>

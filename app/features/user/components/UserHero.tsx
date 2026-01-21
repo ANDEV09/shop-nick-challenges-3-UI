@@ -2,9 +2,14 @@ import { TrendingUp, Wallet } from "lucide-react";
 
 export default function UserHero() {
   const topUsers = [
-    { rank: 1, name: "LeHung2013", amount: "575,000đ", color: "bg-yellow-500" },
-    { rank: 2, name: "Thanh12345", amount: "570,000đ", color: "bg-gray-400" },
-    { rank: 3, name: "Truong27814", amount: "460,000đ", color: "bg-amber-600" },
+    {
+      rank: 1,
+      name: "Hming",
+      amount: "5,775,000,000đ",
+      color: "bg-yellow-500",
+    },
+    { rank: 2, name: "Tuanori", amount: "570,000,000đ", color: "bg-gray-400" },
+    { rank: 3, name: "Hanngo", amount: "1,000,000đ", color: "bg-amber-600" },
   ];
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:items-stretch">
@@ -13,7 +18,7 @@ export default function UserHero() {
           <img
             src="https://meoroblox.com/storage/config/1746807943_47f346a87c0b8825693c5923ed6f81d1.png"
             alt="MEOROBLOX.COM Banner"
-            className="w-full h-full max-h-115"
+            className="w-full h-full max-h-100"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
         </div>
@@ -24,7 +29,7 @@ export default function UserHero() {
           <div className="bg-black text-white py-3 px-6">
             <div className="flex items-center justify-center gap-2">
               <TrendingUp size={20} />
-              <span className="font-bold text-lg">TOP 3 NẠP THÁNG 01</span>
+              <span className="font-bold text-base">TOP 3 NẠP THÁNG 01</span>
             </div>
           </div>
 
@@ -51,8 +56,8 @@ export default function UserHero() {
                 </div>
               ))}
             </div>
-            <button className="w-full bg-linear-to-r from-blue-700 to-blue-900 text-white py-3 rounded-4xl font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2">
-              <Wallet size={16} className="mb-0.5"/>
+            <button className="w-full bg-linear-to-r from-blue-700 to-blue-900 text-white py-3 rounded-4xl font-bold text-sm hover:bg-blue-700 transition flex items-center justify-center gap-2">
+              <Wallet size={16} className="mb-0.5 font-bold" />
               NẠP TIỀN NGAY
             </button>
           </div>

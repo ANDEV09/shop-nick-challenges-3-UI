@@ -46,7 +46,7 @@ export default function Accounts() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <AccountsFilter />
+          <AccountsFilter onFilter={() => {}} />
 
           {isLoading ? (
             <div className="text-center py-12">
