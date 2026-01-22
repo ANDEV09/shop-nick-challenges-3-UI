@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "~/lib/utils";
 import { AxiosError } from "axios";
 import AuthApi, { type RegisterPayload } from "~/api-requests/auth.requests";
 
@@ -16,9 +16,7 @@ export const useRegister = () => {
 
       const result = await AuthApi.register(data);
       console.log("Register result:", result);
-      toast.success(result.message, {
-        position: "bottom-right",
-      });
+      showSuccessToast(result.message);
       setTimeout(() => navigate("/login"), 3000);
 
       return result;
@@ -28,9 +26,7 @@ export const useRegister = () => {
           ? err.response?.data?.message || "Đăng ký thất bại"
           : "Có lỗi không xác định";
       setError(message);
-      toast.error(message, {
-        position: "bottom-right",
-      });
+      showErrorToast(message);
       throw err;
     } finally {
       setIsLoading(false);

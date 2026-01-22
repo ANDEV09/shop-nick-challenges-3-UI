@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "~/lib/utils";
 import { AxiosError } from "axios";
 import AuthApi, { type LoginPayload } from "~/api-requests/auth.requests";
 import { useAuthStore } from "~/store/useAuthStore";
@@ -17,9 +17,7 @@ export const useLogin = () => {
       setError(null);
 
       const result = await AuthApi.login(data);
-      toast.success(result.message, {
-        position: "bottom-right",
-      });
+      showSuccessToast(result.message);
       setUser(result.result.userInfo);
       console.log("Logged in user:", result.result.userInfo);
       setTimeout(() => navigate("/"), 1500);
@@ -31,9 +29,7 @@ export const useLogin = () => {
           ? err.response?.data?.message || "Đăng nhập thất bại"
           : "Có lỗi không xác định";
       setError(message);
-      toast.error(message, {
-        position: "bottom-right",
-      });
+      showErrorToast(message);
       throw err;
     } finally {
       setIsLoading(false);
