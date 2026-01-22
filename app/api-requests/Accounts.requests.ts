@@ -66,10 +66,18 @@ const AccountsApi = {
     return [];
   },
 
-  // Lấy danh sách tài khoản đã đăng bán của tôi
+  getPendingAdminAccounts: async (): Promise<GameAccount[]> => {
+    const res = await privateApi.get<PaginatedApiResponse<GameAccount>>(
+      GAME_ENDPOINTS.GET_PENDING_ADMIN,
+    );
+    const data = res.data.result;
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray((data as any).data)) return (data as any).data;
+    return [];
+  },
   getMySellingAccounts: async (): Promise<GameAccount[]> => {
     const res = await privateApi.get<PaginatedApiResponse<GameAccount>>(
-      "/game-accounts/my-selling"
+      "/game-accounts/my-selling",
     );
     const data = res.data.result;
     if (Array.isArray(data)) return data;

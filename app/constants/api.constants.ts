@@ -35,6 +35,7 @@ export const GAME_ENDPOINTS = {
   PURCHASE_ACCOUNT: (accountId: string) =>
     `/game-accounts/${accountId}/purchase`,
   GET_MY_PURCHASED: "/game-accounts/my-purchased",
+  GET_PENDING_ADMIN: "/game-accounts/admin/pending-accounts",
 } as const;
 
 // ==================== UPLOAD ENDPOINTS ====================

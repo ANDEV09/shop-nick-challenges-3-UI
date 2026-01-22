@@ -23,6 +23,10 @@ export default [
     route("/admin/game-categories", "features/admin/pages/AdminCategories.tsx"),
     route("/admin/game-groups", "features/admin/pages/AdminGroups.tsx"),
     route("/admin/game-accounts", "features/admin/pages/AdminAccounts.tsx"),
+    route(
+      "/admin/pending-accounts",
+      "features/admin/pages/PendingAccounts.tsx",
+    ),
     // route("users", "features/admin/pages/Users.tsx"), // /admin/users
   ]),
 ] satisfies RouteConfig;

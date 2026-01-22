@@ -20,6 +20,7 @@ export interface GameGroup {
 
 export interface GameAccount {
   id: string;
+  accountName: string;
   thumb?: string;
   images?: string[];
   price: number;
