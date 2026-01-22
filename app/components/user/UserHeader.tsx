@@ -72,7 +72,7 @@ export default function UserHeader() {
               <li>
                 <Link
                   to="/admin"
-                  className="relative pb-1 font-bold text-gray-800 hover:text-blue-600"
+                  className="relative pb-1 font-bold text-sm text-gray-800 hover:text-blue-600"
                 >
                   ADMIN PANEL
                 </Link>

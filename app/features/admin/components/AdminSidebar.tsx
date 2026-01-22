@@ -78,13 +78,8 @@ interface AdminSidebarProps {
   setCurrentPage?: (page: string) => void;
 }
 
-export default function AdminSidebar({
-  sidebarOpen,
-  setSidebarOpen,
-  setCurrentPage,
-}: AdminSidebarProps) {
+export default function AdminSidebar() {
   const [gameMenuOpen, setGameMenuOpen] = useState(false);
-  const [serviceMenuOpen, setServiceMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -92,21 +87,12 @@ export default function AdminSidebar({
   };
 
   return (
-    <div
-      className={`${sidebarOpen ? "w-65" : "w-20"} flex flex-col overflow-y-auto bg-[#19244A] text-white transition-all duration-300`}
-    >
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
-            <BarChart3 size={18} className="text-blue-900" />
-          </div>
-          {sidebarOpen && <span className="text-sm font-bold">Logo</span>}
+    <div className="fixed top-0 left-0 h-full z-40 flex flex-col w-64 bg-slate-800 text-white overflow-y-auto">
+      <div className="flex items-center gap-2 p-4">
+        <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
+          <BarChart3 size={18} className="text-blue-900" />
         </div>
-        <Menu
-          size={20}
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="cursor-pointer"
-        />
+        <span className="text-sm font-bold">Logo</span>
       </div>
       <div className="p-4">
         <div className="mb-3 text-xs font-bold text-blue-300">MAIN</div>
@@ -130,8 +116,8 @@ export default function AdminSidebar({
             onClick={() => navigate("/admin/game-categories")}
           />
           <SubMenuItem
-            label="Lịch sử mua nick"
-            onClick={() => navigate("/admin/purchase-history")}
+            label="Nick chờ duyệt"
+            onClick={() => navigate("/admin/pending-accounts")}
           />
         </MenuItem>
       </div>
@@ -160,11 +146,6 @@ export default function AdminSidebar({
           STAFF MANAGER
         </div>
         <MenuItem icon={MessageSquare} label="Yêu Cầu Rút Tiền" badge="9" />
-        <MenuItem
-          icon={FileText}
-          label="Quản Lý Chuyên Mục"
-          onClick={() => setCurrentPage?.("category")}
-        />
       </div>
       <div className="flex-1"></div>
       <div className="border-t border-blue-800 p-4">
