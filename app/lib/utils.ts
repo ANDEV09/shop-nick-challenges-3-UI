@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -37,4 +39,26 @@ export function parseImages(images: unknown): string[] {
     }
   }
   return [];
+}
+
+export function showSuccessToast(
+  message: string,
+  options: Record<string, any> = {},
+) {
+  toast.success(message, {
+    style: { background: "#dcfce7", color: "#166534" },
+    position: "bottom-right",
+    ...options,
+  });
+}
+
+export function showErrorToast(
+  message: string,
+  options: Record<string, any> = {},
+) {
+  toast.error(message, {
+    style: { background: "#fee2e2", color: "#b91c1c" },
+    position: "bottom-right",
+    ...options,
+  });
 }
