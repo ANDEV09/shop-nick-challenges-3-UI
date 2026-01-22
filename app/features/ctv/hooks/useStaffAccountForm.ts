@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { privateApi } from "~/lib/axios-instance";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "~/lib/utils";
 
 export function useStaffAccountForm(groupId: string | null) {
   const [formData, setFormData] = useState<{
@@ -71,9 +71,7 @@ export function useStaffAccountForm(groupId: string | null) {
 
   const handleSubmit = async () => {
     if (!groupId) {
-      toast.error("Thiếu groupId, không thể thêm tài khoản!", {
-        position: "bottom-right",
-      });
+      showErrorToast("Thiếu groupId, không thể thêm tài khoản!");
       return;
     }
     const detailsObj: Record<string, string | number> = {};
@@ -92,16 +90,13 @@ export function useStaffAccountForm(groupId: string | null) {
     };
     try {
       await privateApi.post(`/game-accounts/${groupId}/account`, submitData);
-      toast.success("Đăng tài khoản thành công vui lòng chờ admin duyệt!", {
-        position: "bottom-right",
-      });
+      showSuccessToast("Đăng tài khoản thành công vui lòng chờ admin duyệt!");
       handleReset();
     } catch (err: any) {
-      toast.error(
+      showErrorToast(
         err?.response?.data?.message ||
           err?.message ||
           "Có lỗi khi đăng tài khoản!",
-        { position: "bottom-right" },
       );
     }
   };
