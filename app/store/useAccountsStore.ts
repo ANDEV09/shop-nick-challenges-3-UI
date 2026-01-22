@@ -3,7 +3,7 @@ import AccountsApi, {
   type GameCategory,
   type GameGroup,
 } from "~/api-requests/Accounts.requests";
-import { toast } from "sonner";
+import { showErrorToast } from "~/lib/utils";
 import { AxiosError } from "axios";
 
 interface AccountsStore {
@@ -39,7 +39,7 @@ export const useAccountsStore = create<AccountsStore>((set, get) => ({
           : "Có lỗi không xác định";
 
       set({ error: message, isLoading: false });
-      toast.error(message, { position: "bottom-right" });
+      showErrorToast(message);
     }
   },
 
@@ -64,7 +64,7 @@ export const useAccountsStore = create<AccountsStore>((set, get) => ({
           : "Có lỗi không xác định";
 
       set({ error: message, isLoading: false });
-      toast.error(message, { position: "bottom-right" });
+      showErrorToast(message);
     }
   },
 }));

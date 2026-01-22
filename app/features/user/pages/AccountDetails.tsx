@@ -4,7 +4,7 @@ import { CreditCard, Landmark, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { parseImages } from "~/lib/utils";
 import { useNavigate, useParams } from "react-router";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "~/lib/utils";
 import AccountsApi, {
   type GameAccount,
 } from "~/api-requests/Accounts.requests";
@@ -58,11 +58,10 @@ export default function AccountDetails() {
       const response = await AccountsApi.purchaseAccount(accountId);
       closeAuthModal();
 
-      // Cập nhật balance sau khi mua thành công
       const newBalance = balance - account.price;
       updateBalance(newBalance);
 
-      toast.success(`Mua tài khoản thành công!`);
+      showSuccessToast(`Mua tài khoản thành công!`);
 
       setTimeout(() => {
         navigate("/profile/purchased-accounts");
@@ -72,7 +71,7 @@ export default function AccountDetails() {
         error?.response?.data?.message ||
         "Mua tài khoản thất bại. Vui lòng thử lại sau.";
       setPurchaseError(errorMessage);
-      toast.error(errorMessage);
+      showErrorToast(errorMessage);
       console.error("Purchase error:", error);
     } finally {
       setIsPurchasing(false);
