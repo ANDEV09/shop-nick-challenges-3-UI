@@ -1,17 +1,76 @@
 import { useState, useEffect } from "react";
+import AdminCategoryModal from "../components/AdminCategoryModal";
 import { Plus, Pencil, Trash } from "lucide-react";
-import { formatDateTime } from "~/lib/utils";
-import { useAccountsStore } from "~/store/useAccountsStore";
+import { formatDateTime, showSuccessToast } from "~/lib/utils";
 import { Link } from "react-router-dom";
+import AccountsApi from "~/api-requests/Accounts.requests";
+import { type GameCategory } from "~/types/accounts.types";
 
 export default function AdminCategories() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [, setCurrentTablePage] = useState(1);
-  const { categories, isLoading, fetchCategories } = useAccountsStore();
+  const [categories, setCategories] = useState<GameCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [form, setForm] = useState({ name: "", status: 1 });
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [editId, setEditId] = useState<string | null>(null);
+
+  const fetchAdminCategories = async () => {
+    setIsLoading(true);
+    try {
+      const res = await AccountsApi.getAdminCategories();
+      setCategories(Array.isArray(res) ? res : []);
+    } catch (err) {
+      setCategories([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    fetchAdminCategories();
+  }, []);
+
+  async function handleCategorySubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setFormLoading(true);
+    setFormError("");
+    try {
+      if (editId) {
+        await AccountsApi.updateCategory(editId, {
+          name: form.name,
+          status: form.status,
+        });
+        showSuccessToast("Cập nhật danh mục thành công!");
+      } else {
+        await AccountsApi.addCategory({ name: form.name, status: form.status });
+        showSuccessToast("Thêm danh mục thành công!");
+      }
+      setOpenModal(false);
+      setForm({ name: "", status: 1 });
+      setEditId(null);
+      fetchAdminCategories();
+    } catch (err) {
+      setFormError("Có lỗi xảy ra, thử lại!");
+    } finally {
+      setFormLoading(false);
+    }
+  }
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
+      try {
+        await AccountsApi.deleteCategory(categoryId);
+        showSuccessToast("Xóa danh mục thành công!");
+        fetchAdminCategories();
+      } catch (err) {
+        alert("Xóa thất bại. Vui lòng thử lại!");
+      }
+    }
+  };
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
@@ -59,6 +118,9 @@ export default function AdminCategories() {
                   NGÀY TẠO
                 </th>
                 <th className="px-4 py-3 text-left font-semibold text-gray-700">
+                  TRẠNG THÁI
+                </th>
+                <th className="px-4 py-3 text-left font-semibold text-gray-700">
                   THAO TÁC
                 </th>
               </tr>
@@ -66,7 +128,7 @@ export default function AdminCategories() {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-gray-500">
+                  <td colSpan={5} className="py-8 text-center text-gray-500">
                     Đang tải danh mục...
                   </td>
                 </tr>
@@ -100,11 +162,33 @@ export default function AdminCategories() {
                         {formatDateTime(cat.createdAt)}
                       </span>
                     </td>
+                    <td className="px-4 py-3">
+                      {cat.status === 1 ? (
+                        <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold border border-green-300">
+                          Hiển thị
+                        </span>
+                      ) : (
+                        <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold border border-red-300">
+                          Ẩn
+                        </span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 flex gap-2">
-                      <button className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold">
+                      <button
+                        className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold"
+                        onClick={() => {
+                          setEditId(cat.id);
+                          setForm({ name: cat.name, status: cat.status ?? 1 });
+                          setFormError("");
+                          setOpenModal(true);
+                        }}
+                      >
                         <Pencil size={14} />
                       </button>
-                      <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold">
+                      <button
+                        className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold"
+                        onClick={() => handleDeleteCategory(cat.id)}
+                      >
                         <Trash size={14} />
                       </button>
                       <Link
@@ -118,13 +202,35 @@ export default function AdminCategories() {
                 ))
               )}
             </tbody>
-            <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700 mt-6  ">
-              <Plus size={18} />
-              Thêm danh mục mới
-            </button>
           </table>
+          <button
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700 mt-6"
+            onClick={() => {
+              setEditId(null);
+              setForm({ name: "", status: 1 });
+              setFormError("");
+              setOpenModal(true);
+            }}
+          >
+            <Plus size={18} />
+            Thêm danh mục mới
+          </button>
         </div>
       </div>
+
+      <AdminCategoryModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          setEditId(null);
+        }}
+        form={form}
+        setForm={setForm}
+        formError={formError}
+        formLoading={formLoading}
+        onSubmit={handleCategorySubmit}
+        isEdit={!!editId}
+      />
     </div>
   );
 }

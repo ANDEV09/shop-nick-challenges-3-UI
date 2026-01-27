@@ -12,12 +12,46 @@ import type {
 } from "~/types/accounts.types";
 
 const AccountsApi = {
+  // Thêm category mới (admin)
+  addCategory: async (data: { name: string; status: number }): Promise<any> => {
+    const res = await privateApi.post(GAME_ENDPOINTS.ADD_CATEGORY, data);
+    return res.data;
+  },
   // Lấy tất cả categories
   getCategories: async (): Promise<GameCategory[]> => {
     const response = await publicApi.get<ApiResponse<GameCategory>>(
       GAME_ENDPOINTS.GET_CATEGORIES,
     );
     return response.data.result;
+  },
+
+  // Lấy tất cả categories cho admin
+  getAdminCategories: async (): Promise<GameCategory[]> => {
+    const response = await privateApi.get<{
+      message: string;
+      result: GameCategory[];
+    }>(GAME_ENDPOINTS.GET_ADMIN_CATEGORIES);
+    return response.data.result;
+  },
+
+  // Cập nhật category (admin)
+  updateCategory: async (
+    categoryId: string,
+    data: { name: string; status: number },
+  ): Promise<any> => {
+    const res = await privateApi.put(
+      GAME_ENDPOINTS.DELETE_CATEGORY(categoryId),
+      data,
+    );
+    return res.data;
+  },
+
+  // Xóa category (admin)
+  deleteCategory: async (categoryId: string): Promise<any> => {
+    const res = await privateApi.delete(
+      GAME_ENDPOINTS.DELETE_CATEGORY(categoryId),
+    );
+    return res.data;
   },
 
   // Lấy groups theo categoryId
@@ -44,6 +78,14 @@ const AccountsApi = {
   getAccountDetail: async (accountId: string): Promise<GameAccount> => {
     const response = await publicApi.get<SingleApiResponse<GameAccount>>(
       GAME_ENDPOINTS.GET_ACCOUNT_DETAIL(accountId),
+    );
+    return response.data.result;
+  },
+
+  // Lấy chi tiết account cho admin
+  getAccountDetailAdmin: async (accountId: string): Promise<GameAccount> => {
+    const response = await privateApi.get<SingleApiResponse<GameAccount>>(
+      GAME_ENDPOINTS.GET_ACCOUNT_DETAIL_ADMIN(accountId),
     );
     return response.data.result;
   },

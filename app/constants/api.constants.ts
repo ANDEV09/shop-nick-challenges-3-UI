@@ -24,9 +24,14 @@ export const USER_ENDPOINTS = {
 // ==================== GAME ENDPOINTS ====================
 export const GAME_ENDPOINTS = {
   GET_CATEGORIES: "/game-categories",
+  ADD_CATEGORY: "/game-categories",
+  GET_ADMIN_CATEGORIES: "/game-categories/admin/game-categories",
+  DELETE_CATEGORY: (categoryId: string) => `/game-categories/${categoryId}`,
   GET_GROUPS_BY_CATEGORY: (categoryId: string) => `/game-groups/${categoryId}`,
   GET_ACCOUNT_DETAIL: (accountId: string) =>
     `/game-accounts/detail/${accountId}`,
+  GET_ACCOUNT_DETAIL_ADMIN: (accountId: string) =>
+    `/game-accounts/admin/account/${accountId}`,
   GET_ACCOUNTS_BY_GROUP: (
     groupId: string,
     page: number = 1,
