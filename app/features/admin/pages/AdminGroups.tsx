@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatDateTime } from "~/lib/utils";
 import { useAccountsStore } from "~/store/useAccountsStore";
 import { Pencil, Plus, Trash } from "lucide-react";
+import Modal from "~/components/shared/Modal";
 
 export default function AdminGroups() {
   const navigate = useNavigate();
@@ -17,6 +18,31 @@ export default function AdminGroups() {
   }, [categoryId, fetchGroupsByCategory]);
 
   const groupList = categoryId && groups[categoryId] ? groups[categoryId] : [];
+
+  // Modal state
+  const [openModal, setOpenModal] = useState(false);
+  const [form, setForm] = useState({ title: "", thumbnail: "", status: 1 });
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  // Fake API call for demo, replace with real API
+  async function handleAddGroup(e: React.FormEvent) {
+    e.preventDefault();
+    setFormLoading(true);
+    setFormError("");
+    try {
+      // TODO: Replace with real API call
+      // await api.addGroup({ ...form, categoryId })
+      await new Promise((res) => setTimeout(res, 800));
+      setOpenModal(false);
+      setForm({ title: "", thumbnail: "", status: 1 });
+      if (categoryId) fetchGroupsByCategory(categoryId);
+    } catch (err) {
+      setFormError("Có lỗi xảy ra, thử lại!");
+    } finally {
+      setFormLoading(false);
+    }
+  }
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
@@ -33,9 +59,6 @@ export default function AdminGroups() {
               Quay lại
             </button>
           </div>
-          <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700">
-            <Plus size={16} /> Thêm group
-          </button>
         </div>
         <div className="mb-6 overflow-x-auto">
           <table className="w-full text-sm">
@@ -104,29 +127,90 @@ export default function AdminGroups() {
                         {formatDateTime(group.createdAt)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 flex gap-2">
-                      <button className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold">
-                        <Pencil size={14} />
-                      </button>
-                      <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold">
-                        <Trash size={14} />
-                      </button>
-                      <button
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold"
-                        onClick={() =>
-                          navigate(`/admin/game-accounts?groupId=${group.id}`)
-                        }
-                      >
-                        Danh Sách Nick
-                      </button>
+                    <td className="px-4 py-3 h-full">
+                      <div className="h-full flex gap-2 text-left">
+                        <button className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold">
+                          <Pencil size={14} />
+                        </button>
+                        <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold">
+                          <Trash size={14} />
+                        </button>
+                        <button
+                          className="bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold"
+                          onClick={() =>
+                            navigate(`/admin/game-accounts?groupId=${group.id}`)
+                          }
+                        >
+                          Danh Sách Nick
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+          <button
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 mt-6"
+            onClick={() => setOpenModal(true)}
+          >
+            <Plus size={16} /> Thêm group
+          </button>
         </div>
       </div>
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <h2 className="text-lg font-bold mb-4">Thêm group mới</h2>
+        <form onSubmit={handleAddGroup} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Tên group</label>
+            <input
+              type="text"
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={form.title}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, title: e.target.value }))
+              }
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Thumbnail (URL)
+            </label>
+            <input
+              type="text"
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={form.thumbnail}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, thumbnail: e.target.value }))
+              }
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Trạng thái</label>
+            <select
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={form.status}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, status: Number(e.target.value) }))
+              }
+            >
+              <option value={1}>Hiển thị</option>
+              <option value={0}>Ẩn</option>
+            </select>
+          </div>
+          {formError && <div className="text-red-500 text-sm">{formError}</div>}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold disabled:opacity-60"
+            disabled={formLoading}
+          >
+            {formLoading ? "Đang thêm..." : "Thêm group"}
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }
