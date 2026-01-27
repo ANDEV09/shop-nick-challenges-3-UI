@@ -74,6 +74,17 @@ const AccountsApi = {
     return response.data.result.data;
   },
 
+  // Add new group (admin)
+  addGroup: async (data: {
+    title: string;
+    categoryId: string;
+    thumbnail: string;
+    status: number;
+  }): Promise<any> => {
+    const res = await privateApi.post("/game-groups", data);
+    return res.data;
+  },
+
   // Lấy chi tiết account
   getAccountDetail: async (accountId: string): Promise<GameAccount> => {
     const response = await publicApi.get<SingleApiResponse<GameAccount>>(

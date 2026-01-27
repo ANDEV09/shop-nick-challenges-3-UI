@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { formatDateTime } from "~/lib/utils";
+import { formatDateTime, showSuccessToast } from "~/lib/utils";
 import { useAccountsStore } from "~/store/useAccountsStore";
 import { Pencil, Plus, Trash } from "lucide-react";
-import Modal from "~/components/shared/Modal";
+import AdminGroupModal from "../components/AdminGroupModal";
+import AccountsApi from "~/api-requests/Accounts.requests";
 
 export default function AdminGroups() {
   const navigate = useNavigate();
@@ -19,23 +20,33 @@ export default function AdminGroups() {
 
   const groupList = categoryId && groups[categoryId] ? groups[categoryId] : [];
 
-  // Modal state
   const [openModal, setOpenModal] = useState(false);
   const [form, setForm] = useState({ title: "", thumbnail: "", status: 1 });
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [editId, setEditId] = useState<string | null>(null);
 
-  // Fake API call for demo, replace with real API
-  async function handleAddGroup(e: React.FormEvent) {
+  async function handleGroupSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormLoading(true);
     setFormError("");
     try {
-      // TODO: Replace with real API call
-      // await api.addGroup({ ...form, categoryId })
-      await new Promise((res) => setTimeout(res, 800));
+      if (!categoryId) {
+        setFormError("Thiếu categoryId");
+        setFormLoading(false);
+        return;
+      }
+      if (editId) {
+        // TODO: implement edit group API
+        // await AccountsApi.updateGroup(editId, { ...form, categoryId });
+        showSuccessToast("Cập nhật nhóm thành công!");
+      } else {
+        await AccountsApi.addGroup({ ...form, categoryId });
+        showSuccessToast("Thêm nhóm thành công!");
+      }
       setOpenModal(false);
       setForm({ title: "", thumbnail: "", status: 1 });
+      setEditId(null);
       if (categoryId) fetchGroupsByCategory(categoryId);
     } catch (err) {
       setFormError("Có lỗi xảy ra, thử lại!");
@@ -152,65 +163,31 @@ export default function AdminGroups() {
           </table>
           <button
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 mt-6"
-            onClick={() => setOpenModal(true)}
+            onClick={() => {
+              setEditId(null);
+              setForm({ title: "", thumbnail: "", status: 1 });
+              setFormError("");
+              setOpenModal(true);
+            }}
           >
-            <Plus size={16} /> Thêm group
+            <Plus size={16} /> Add group
           </button>
         </div>
       </div>
 
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
-        <h2 className="text-lg font-bold mb-4">Thêm group mới</h2>
-        <form onSubmit={handleAddGroup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Tên group</label>
-            <input
-              type="text"
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-              value={form.title}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, title: e.target.value }))
-              }
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Thumbnail (URL)
-            </label>
-            <input
-              type="text"
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-              value={form.thumbnail}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, thumbnail: e.target.value }))
-              }
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Trạng thái</label>
-            <select
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-              value={form.status}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, status: Number(e.target.value) }))
-              }
-            >
-              <option value={1}>Hiển thị</option>
-              <option value={0}>Ẩn</option>
-            </select>
-          </div>
-          {formError && <div className="text-red-500 text-sm">{formError}</div>}
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold disabled:opacity-60"
-            disabled={formLoading}
-          >
-            {formLoading ? "Đang thêm..." : "Thêm group"}
-          </button>
-        </form>
-      </Modal>
+      <AdminGroupModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          setEditId(null);
+        }}
+        form={form}
+        setForm={setForm}
+        formError={formError}
+        formLoading={formLoading}
+        onSubmit={handleGroupSubmit}
+        isEdit={!!editId}
+      />
     </div>
   );
 }
