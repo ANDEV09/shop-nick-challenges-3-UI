@@ -27,6 +27,10 @@ export default [
       "/admin/pending-accounts",
       "features/admin/pages/PendingAccounts.tsx",
     ),
+    route(
+      "/admin/account-approve/:accountId",
+      "features/admin/pages/AccountApproveDetails.tsx",
+    ),
     // route("users", "features/admin/pages/Users.tsx"), // /admin/users
   ]),
 ] satisfies RouteConfig;
