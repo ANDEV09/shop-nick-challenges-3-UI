@@ -92,7 +92,7 @@ export default function AdminSidebar() {
         <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
           <BarChart3 size={18} className="text-blue-900" />
         </div>
-        <span className="text-sm font-bold">Logo</span>
+        <span className="text-sm font-bold">Shop Nick Game</span>
       </div>
       <div className="p-4">
         <div className="mb-3 text-xs font-bold text-blue-300">MAIN</div>

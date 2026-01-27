@@ -91,16 +91,12 @@ export default function CtvSidebar({
       className={`${sidebarOpen ? "w-65" : "w-20"} flex flex-col overflow-y-auto bg-[#19244A] text-white transition-all duration-300`}
     >
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 p-4">
           <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
             <BarChart3 size={18} className="text-blue-900" />
           </div>
+          <span className="text-sm font-bold">Shop Nick Game</span>
         </div>
-        <Menu
-          size={20}
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="cursor-pointer"
-        />
       </div>
       <div className="p-4">
         <div className="mb-3 text-xs font-bold text-blue-300">MAIN</div>
