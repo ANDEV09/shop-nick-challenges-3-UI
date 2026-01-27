@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import AccountsApi from "~/api-requests/Accounts.requests";
 import type { GameAccount } from "~/types/accounts.types";
+import { formatDateTime } from "~/lib/utils";
 
 export interface StaffAccountsListProps {
   title?: string;
@@ -44,64 +45,75 @@ export const StaffAccountsList: React.FC<StaffAccountsListProps> = ({
           )}
           {!loading && !error && accounts.length > 0 && (
             <div className="overflow-x-auto">
-              <table className="min-w-full border text-sm">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="border px-2 py-1">STT</th>
-                    <th className="border px-2 py-1">ẢNH</th>
-                    <th className="border px-2 py-1">TÀI KHOẢN</th>
-                    <th className="border px-2 py-1">THỜI GIAN ĐĂNG</th>
-                    <th className="border px-2 py-1">TRẠNG THÁI</th>
-                    <th className="border px-2 py-1">THAO TÁC</th>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      STT
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      ẢNH
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      TÀI KHOẢN
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      GIÁ
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      THỜI GIAN ĐĂNG
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      TRẠNG THÁI
+                    </th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700">
+                      THAO TÁC
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {accounts.map((acc, idx) => (
-                    <tr key={acc.id} className="text-center">
-                      <td className="border px-2 py-1">{idx + 1}</td>
-                      <td className="border px-2 py-1">
+                    <tr
+                      key={acc.id}
+                      className="hover:bg-gray-50  border-b border-gray-100 "
+                    >
+                      <td className="px-2 py-4 text-center">
+                        <span className=" bg-red-600 text-white text-xs px-2 py-1 rounded font-bold ml-1">
+                          {idx + 1}
+                        </span>
+                      </td>
+                      <td className="px-2 py-4 text-center">
                         <img
-                          src={
-                            Array.isArray(acc.images)
-                              ? acc.images[0]
-                              : acc.thumb
-                          }
+                          src={acc.thumb}
                           alt="thumb"
-                          className="w-16 h-10 object-cover rounded border mx-auto"
+                          className="w-40 h-25 object-contain rounded"
                         />
                       </td>
-                      <td className="border px-2 py-1 font-semibold">
-                        {/* {acc.accountName} */}
+                      <td className="px-2 py-4 text-center font-semibold ">
+                        {acc.accountName}
                       </td>
-                      <td className="border px-2 py-1">
-                        {acc.createdAt
-                          ? acc.createdAt.replace("T", " ").slice(0, 19)
-                          : "-"}
+                      <td className="px-2 py-4 text-center font-bold text-blue-600">
+                        {acc.price?.toLocaleString()}đ
                       </td>
-                      <td className="border px-2 py-1">
-                        {acc.status === 2 ? "Đã bán" : "Đang bán"}
+                      <td className="px-2 py-4 text-center">
+                        {acc.createdAt ? formatDateTime(acc.createdAt) : "-"}
                       </td>
-                      <td className="border px-2 py-1 flex flex-col gap-1 items-center justify-center">
-                        <button className="bg-red-500 text-white px-2 py-1 rounded mb-1 hover:bg-red-600 text-xs">
-                          XÓA
-                        </button>
-                        <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs flex items-center gap-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3zm0 0v3a2 2 0 002 2h3"
-                            />
-                          </svg>
-                          EDIT
-                        </button>
+                      <td className="px-2 py-4 text-center">
+                        {acc.status === 2
+                          ? "Đang bán"
+                          : acc.status === 0
+                          ? "Chờ duyệt"
+                          : ""}
+                      </td>
+                      <td className="px-2 py-4 text-center ">
+                        <div className="flex flex-col gap-2 justify-center">
+                          <button className="bg-red-500 text-white px-3 py-1.5 rounded-full hover:bg-red-600 text-xs w-20">
+                            XÓA
+                          </button>
+                          <button className="bg-blue-500 text-white px-3 py-1.5 rounded-full hover:bg-blue-600 text-xs w-20">
+                            EDIT
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

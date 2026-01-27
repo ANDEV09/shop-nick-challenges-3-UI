@@ -43,6 +43,8 @@ export const useAccountsStore = create<AccountsStore>((set, get) => ({
     }
   },
 
+  
+
   fetchGroupsByCategory: async (categoryId: string) => {
     const existingGroups = get().groups[categoryId];
     if (existingGroups && existingGroups.length > 0) {

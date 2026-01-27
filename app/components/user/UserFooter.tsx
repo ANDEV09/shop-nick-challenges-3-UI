@@ -174,21 +174,12 @@ export default function Footer() {
           <p className="text-center text-gray-400 text-sm">
             © 2026 - Bản quyền thuộc về{" "}
             <a
-              href="https://tuanori.vn"
+              href="#"
               className="text-pink-400 hover:underline font-semibold"
               target="_blank"
               rel="noopener noreferrer"
             >
-              TUANORI.VN
-            </a>{" "}
-            - Thiết kế bởi{" "}
-            <a
-              href="https://tuanori.vn"
-              className="text-pink-400 hover:underline font-bold"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Phạm Hoàng Tuấn
+              MEOROBLOX.COM
             </a>
           </p>
         </div>

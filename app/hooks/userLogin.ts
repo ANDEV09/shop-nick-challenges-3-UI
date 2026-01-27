@@ -18,8 +18,8 @@ export const useLogin = () => {
 
       const result = await AuthApi.login(data);
       showSuccessToast(result.message);
-      setUser(result.result.userInfo);
-      console.log("Logged in user:", result.result.userInfo);
+      const me = await AuthApi.getMe();
+      setUser(me.result);
       setTimeout(() => navigate("/"), 1500);
 
       return result;
