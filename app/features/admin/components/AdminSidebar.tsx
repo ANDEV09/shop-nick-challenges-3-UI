@@ -99,11 +99,11 @@ export default function AdminSidebar() {
         <MenuItem
           icon={Home}
           label="Bảng Điều Khiển"
-          onClick={() => navigate("/user-ctv")}
+          onClick={() => navigate("/admin")}
         />
       </div>
       <div className="p-4">
-        <div className="mb-3 text-xs font-bold text-blue-300">Staff Menu</div>
+        <div className="mb-3 text-xs font-bold text-blue-300">Admin Menu</div>
         <MenuItem
           icon={Users}
           label="Bán Nick Game"
