@@ -1,32 +1,27 @@
 import { useState } from "react";
-import { Search, RotateCcw } from "lucide-react";
 
 interface AccountsFilterProps {
-  onFilter: (filters: {
-    accountId: string;
-    priceFilter: string;
-    statusFilter: string;
-  }) => void;
+  onFilter: (priceFilter: string) => void;
 }
 
 export default function AccountsFilter({ onFilter }: AccountsFilterProps) {
   const [accountId, setAccountId] = useState("");
   const [priceFilter, setPriceFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all"); // chỉ để UI
 
   const handleSearch = () => {
-    onFilter({ accountId, priceFilter, statusFilter });
+    onFilter(priceFilter);
   };
 
   const handleReset = () => {
     setAccountId("");
     setPriceFilter("all");
     setStatusFilter("all");
-    onFilter({ accountId: "", priceFilter: "all", statusFilter: "all" });
+    onFilter("all");
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+    <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
       <div className="grid grid-cols-3 gap-6 mb-6">
         <div>
           <label className="block text-sm font-bold text-gray-800 mb-2">
@@ -37,7 +32,7 @@ export default function AccountsFilter({ onFilter }: AccountsFilterProps) {
             placeholder="Nhập Mã số"
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -48,12 +43,13 @@ export default function AccountsFilter({ onFilter }: AccountsFilterProps) {
           <select
             value={priceFilter}
             onChange={(e) => setPriceFilter(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">Tất cả</option>
             <option value="low">Dưới 100K</option>
             <option value="medium">100K - 500K</option>
-            <option value="high">Trên 500K</option>
+            <option value="high">500K - 1 triệu</option>
+            <option value="max">Trên 1 triệu</option>
           </select>
         </div>
 
@@ -64,7 +60,7 @@ export default function AccountsFilter({ onFilter }: AccountsFilterProps) {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">Trạng Thái</option>
             <option value="available">Còn hàng</option>

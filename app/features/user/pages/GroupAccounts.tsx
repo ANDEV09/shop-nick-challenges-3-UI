@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router";
 import UserHeader from "~/components/user/UserHeader";
 import UserTopBar from "~/components/user/UserTopBar";
 import AccountsFilter from "~/features/user/components/AccountsFilter";
-import { formatCurrency } from "~/lib/utils";
+import { formatCurrency, showErrorToast } from "~/lib/utils";
 import AccountsApi, {
   type GameAccount,
 } from "~/api-requests/Accounts.requests";
-import UserFooter from "~/components/user/UserFooter";
+import UserFooters from "~/components/user/UserFooter";
 
 export default function Accounts() {
   const { groupId } = useParams<{ groupId: string }>();
@@ -25,7 +25,7 @@ export default function Accounts() {
         const data = await AccountsApi.getAccountsByGroup(groupId, page, limit);
         setAccounts(data);
       } catch (error) {
-        console.error("Error fetching accounts:", error);
+        showErrorToast("Không thể tải danh sách tài khoản");
       } finally {
         setIsLoading(false);
       }
@@ -33,12 +33,33 @@ export default function Accounts() {
     fetchAccounts();
   }, [groupId, page]);
 
+  const [priceFilter, setPriceFilter] = useState("all");
+
+  const handleFilter = (newPriceFilter: string) => {
+    setPriceFilter(newPriceFilter);
+  };
+
+  const priceRanges: Record<string, [number, number]> = {
+    low: [0, 100000],
+    medium: [100000, 500000],
+    high: [500000, 10000000],
+    max: [10000000, Infinity],
+  };
+
+  const filteredAccounts = accounts.filter((acc) => {
+    if (priceFilter !== "all") {
+      const [min, max] = priceRanges[priceFilter];
+      if (acc.price < min || acc.price > max) return false;
+    }
+    return true;
+  });
+
   return (
-    <>
+    <div className="bg-gray-100">
       <UserTopBar />
       <UserHeader />
 
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen">
         <div className="w-full bg-blue-800 text-white py-6 px-4">
           <h1 className="text-3xl font-bold text-center">
             Danh sách tài khoản
@@ -46,19 +67,19 @@ export default function Accounts() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <AccountsFilter onFilter={() => {}} />
+          <AccountsFilter onFilter={handleFilter} />
 
           {isLoading ? (
             <div className="text-center py-12">
               <p className="text-gray-600">Đang tải...</p>
             </div>
-          ) : accounts.length === 0 ? (
+          ) : filteredAccounts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-600">Không có tài khoản nào</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ">
-              {accounts.map((account) => (
+              {filteredAccounts.map((account) => (
                 <div
                   key={account.id}
                   onClick={() => navigate(`/account-details/${account.id}`)}
@@ -96,7 +117,7 @@ export default function Accounts() {
           )}
         </div>
       </div>
-      <UserFooter />
-    </>
+      <UserFooters />
+    </div>
   );
 }
