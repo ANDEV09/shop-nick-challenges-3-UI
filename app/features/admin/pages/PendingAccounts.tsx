@@ -88,15 +88,15 @@ export default function PendingAccounts() {
                     <td className="px-2 py-4 text-center">
                       {acc.createdAt ? formatDateTime(acc.createdAt) : "-"}
                     </td>
-                    <td className="px-5 py-4 text-center ">
+                    <td className="px-2 py-4 text-center ">
                       <div className="flex flex-col gap-2 items-center justify-center">
                         <button
-                          className="bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 text-xs w-20"
+                          className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 text-xs w-20"
                           onClick={() =>
                             navigate(`/admin/account-approve/${acc.id}`)
                           }
                         >
-                          Kiểm duyệt
+                          View
                         </button>
                       </div>
                     </td>
