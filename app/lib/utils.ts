@@ -1,5 +1,4 @@
 import { toast } from "sonner";
-
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -61,4 +60,8 @@ export function showErrorToast(
     position: "bottom-right",
     ...options,
   });
+}
+
+export function random4Chars() {
+  return Math.random().toString(36).substring(2, 6).toUpperCase();
 }
