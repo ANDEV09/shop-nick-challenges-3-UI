@@ -68,7 +68,7 @@ export default function UserSidebar({
             }`}
           >
             <HandCoins strokeWidth={2} className="mb-1" size={20} />
-            <span className="font-semibold">Biến động số dư</span>
+            <span className="font-semibold">Lịch sử nạp tiền</span>
           </button>
         </div>
       </div>

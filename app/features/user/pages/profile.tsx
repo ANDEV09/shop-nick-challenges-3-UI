@@ -3,6 +3,9 @@ import UserHeader from "~/components/user/UserHeader";
 import UserTopBar from "~/components/user/UserTopBar";
 import UserSidebar from "~/features/user/components/profile/UserSidebar";
 import ProfileInfo from "~/features/user/components/profile/ProfileInfo";
+import AtmTopup from "~/features/user/components/profile/AtmTopup";
+import TopupHistories from "~/features/user/components/profile/TopupHistories";
+import { useAuthStore } from "~/store/useAuthStore";
 import { CircleUserRound } from "lucide-react";
 import AccountHistories from "~/features/user/components/profile/AccountHistories";
 import { useNavigate, useParams } from "react-router";
@@ -17,16 +20,17 @@ export default function Profile() {
     navigate(`/profile/${menuId}`);
   };
 
+  const { authUser } = useAuthStore();
   const renderContent = () => {
     switch (activeMenu) {
       case "profile-info":
         return <ProfileInfo />;
       // case "card-topup":
       //   return <PlaceholderSection title="Nạp tiền thẻ cào" />;
-      // case "atm-topup":
-      //   return <PlaceholderSection title="Nạp tiền ATM" />;
-      // case "balance-history":
-      //   return <PlaceholderSection title="Biến động số dư" />;
+      case "atm-topup":
+        return authUser ? <AtmTopup username={authUser.username} /> : null;
+      case "balance-history":
+        return <TopupHistories />;
       case "purchased-accounts":
         return <AccountHistories />;
       // case "spin-history":

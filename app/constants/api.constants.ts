@@ -19,6 +19,7 @@ export const USER_ENDPOINTS = {
   UPLOAD_AVATAR: "/users/avatar",
   UPDATE_PROFILE: "/users/profile",
   CHANGE_PASSWORD: "/users/change-password",
+  GET_DEPOSIT_HISTORIES: (userId: string) => `/deposits/history/${userId}`,
 } as const;
 
 // ==================== GAME ENDPOINTS ====================
@@ -41,6 +42,14 @@ export const GAME_ENDPOINTS = {
     `/game-accounts/${accountId}/purchase`,
   GET_MY_PURCHASED: "/game-accounts/my-purchased",
   GET_PENDING_ADMIN: "/game-accounts/admin/pending-accounts",
+  GET_ADMIN_GROUPS_BY_CATEGORY: (categoryId: string, page = 1, limit = 10) =>
+    `/game-groups/admin/groups/${categoryId}?page=${page}&limit=${limit}`,
+} as const;
+
+// ==================== ADMIN GAME ACCOUNT ENDPOINTS ====================
+export const ADMIN_GAME_ACCOUNT_ENDPOINTS = {
+  APPROVE_PENDING_STATUS: (userId: string) =>
+    `/game-accounts/admin/pending-account/${userId}/status`,
 } as const;
 
 // ==================== UPLOAD ENDPOINTS ====================

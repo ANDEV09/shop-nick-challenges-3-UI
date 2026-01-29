@@ -1,4 +1,4 @@
-import { AUTH_ENDPOINTS } from "~/constants/api.constants";
+import { AUTH_ENDPOINTS, USER_ENDPOINTS } from "~/constants/api.constants";
 import { privateApi, publicApi } from "~/lib/axios-instance";
 
 const UserApi = {
@@ -24,6 +24,20 @@ const UserApi = {
       { token, new_password: newPassword },
     );
     return response.data;
+  },
+
+  getUserDepositHistories: async (userId: string) => {
+    const res = await privateApi.get(
+      USER_ENDPOINTS.GET_DEPOSIT_HISTORIES(userId),
+    );
+    return (res.data.data || []).map((item: any) => ({
+      id: item.id,
+      amount: item.amount ?? 0,
+      balanceBefore: item.balanceBefore ?? 0,
+      balanceAfter: item.balanceAfter ?? 0,
+      createdAt: item.createdAt,
+      status: "Thành công",
+    }));
   },
 };
 
