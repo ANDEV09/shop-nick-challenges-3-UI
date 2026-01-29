@@ -15,16 +15,21 @@ export default function PolicyNotice() {
           nick game trên hệ thống của chúng tôi:
         </p>
         <ul className="list-disc pl-5 space-y-1 font-semibold">
+          <li>
+            Chiết khấu nick sẽ là 20% trên mỗi nick ví dụ(nick 100k nhận 80k).
+          </li>
           <li>Thông tin nick phải chính xác, đầy đủ và không được sai lệch.</li>
           <li>
             Những hành vi cố ý spam phá hoại hệ thống sẽ bị khóa vĩnh viễn.
           </li>
+
           <li>
             Nick sau khi đã được duyệt admin sẽ tạm giữ quyền truy cập đến khi
             giao dịch hoàn tất.
           </li>
           <li>
-            Trong quá trình đăng bán có thể hủy đăng bán để nhận lại nick (chưa được ai mua).
+            Trong quá trình đăng bán có thể hủy đăng bán để nhận lại nick (chưa
+            được ai mua).
           </li>
           <li>Mọi thắc mắc vui lòng liên hệ Admin qua zalo 0983699292</li>
         </ul>

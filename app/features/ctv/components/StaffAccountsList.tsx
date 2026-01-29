@@ -101,18 +101,39 @@ export const StaffAccountsList: React.FC<StaffAccountsListProps> = ({
                       <td className="px-2 py-4 text-center">
                         {acc.status === 2
                           ? "Đang bán"
-                          : acc.status === 0
-                          ? "Chờ duyệt"
-                          : ""}
+                          : acc.status === 1
+                            ? "Nick đã bán"
+                            : acc.status === 0
+                              ? "Chờ duyệt"
+                              : acc.status === 3
+                                ? "Không được duyệt"
+                                : ""}
                       </td>
                       <td className="px-2 py-4 text-center ">
-                        <div className="flex flex-col gap-2 justify-center">
-                          <button className="bg-red-500 text-white px-3 py-1.5 rounded-full hover:bg-red-600 text-xs w-20">
-                            XÓA
-                          </button>
-                          <button className="bg-blue-500 text-white px-3 py-1.5 rounded-full hover:bg-blue-600 text-xs w-20">
-                            EDIT
-                          </button>
+                        <div className="flex flex-col gap-2 justify-center items-center">
+                          {acc.status === 3 ? (
+                            <button
+                              className="bg-red-500 text-white px-3 py-2 rounded-full font-semibold hover:bg-red-600 text-xs w-20 mx-auto"
+                              onClick={() =>
+                                alert(acc.description || "Không có lý do")
+                              }
+                            >
+                              Lý do
+                            </button>
+                          ) : (
+                            <>
+                              {acc.status === 2 && (
+                                <button className="bg-red-500 text-white px-3 py-1.5 rounded-full hover:bg-red-600 text-xs w-20">
+                                  HỦY BÁN
+                                </button>
+                              )}
+                              {acc.status === 0 && (
+                                <button className="bg-blue-500 text-white px-3 py-1.5 rounded-full hover:bg-blue-600 text-xs w-20">
+                                  EDIT
+                                </button>
+                              )}
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>

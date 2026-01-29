@@ -1,6 +1,8 @@
-import { Search, Bell, Settings, Home, Moon, Maximize2 } from "lucide-react";
+import { Bell, Settings, Home, Moon, Maximize2 } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export default function StaffHeader() {
+  const navigate = useNavigate();
   return (
     <div className="flex items-center justify-between border-b border-gray-200 bg-white px-8 py-4 shadow-sm">
       <div className="flex items-center gap-3">
@@ -12,6 +14,7 @@ export default function StaffHeader() {
         <Home
           className="cursor-pointer text-gray-400 hover:text-gray-600"
           size={20}
+          onClick={() => navigate("/")}
         />
         <Moon
           className="cursor-pointer text-gray-400 hover:text-gray-600"
