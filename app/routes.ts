@@ -4,7 +4,7 @@ export default [
   index("routes/homePage.tsx"),
   route("login", "routes/user/LoginPage.routes.tsx"),
   route("register", "routes/user/RegisterPage.routes.tsx"),
-  route("profile/:tab", "features/user/pages/profile.tsx", {
+  route("profile/:tab", "features/user/pages/Profile.tsx", {
     id: "profile-tab",
   }),
   route("group-accounts/:groupId", "features/user/pages/GroupAccounts.tsx"),
