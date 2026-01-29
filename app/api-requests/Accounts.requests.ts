@@ -1,5 +1,8 @@
 import { publicApi, privateApi } from "~/lib/axios-instance";
-import { GAME_ENDPOINTS } from "~/constants/api.constants";
+import {
+  ADMIN_GAME_ACCOUNT_ENDPOINTS,
+  GAME_ENDPOINTS,
+} from "~/constants/api.constants";
 import type {
   GameCategory,
   GameGroup,
@@ -12,6 +15,21 @@ import type {
 } from "~/types/accounts.types";
 
 const AccountsApi = {
+  approvePendingAccountStatus: async (
+    userId: string,
+    status: number,
+    description?: string,
+    newPassword?: string,
+  ): Promise<any> => {
+    const data: any = { status };
+    if (description !== undefined) data.description = description;
+    if (newPassword) data.password = newPassword;
+    const res = await privateApi.put(
+      ADMIN_GAME_ACCOUNT_ENDPOINTS.APPROVE_PENDING_STATUS(userId),
+      data,
+    );
+    return res.data;
+  },
   // Thêm category mới (admin)
   addCategory: async (data: { name: string; status: number }): Promise<any> => {
     const res = await privateApi.post(GAME_ENDPOINTS.ADD_CATEGORY, data);
@@ -54,12 +72,46 @@ const AccountsApi = {
     return res.data;
   },
 
+  // Xóa group (admin)
+  deleteGroup: async (groupId: string): Promise<any> => {
+    const res = await privateApi.delete(`/game-groups/${groupId}`);
+    return res.data;
+  },
+
+  // Sửa group (admin)
+  updateGroup: async (
+    groupId: string,
+    data: {
+      title: string;
+      categoryId: string;
+      thumbnail: string;
+      status: number;
+    },
+  ): Promise<any> => {
+    const res = await privateApi.put(`/game-groups/${groupId}`, data);
+    return res.data;
+  },
+
   // Lấy groups theo categoryId
   getGroupsByCategory: async (categoryId: string): Promise<GameGroup[]> => {
     const response = await publicApi.get<ApiResponse<GameGroup>>(
       GAME_ENDPOINTS.GET_GROUPS_BY_CATEGORY(categoryId),
     );
     return response.data.result;
+  },
+
+  // Lấy tất cả groups cho admin theo categoryId (bao gồm cả ẩn)
+  getAdminGroupsByCategory: async (
+    categoryId: string,
+    params?: { page?: number; limit?: number },
+  ): Promise<GameGroup[]> => {
+    const page = params?.page ?? 1;
+    const limit = params?.limit ?? 50;
+    const response = await privateApi.get<{
+      message: string;
+      result: { data: GameGroup[] };
+    }>(GAME_ENDPOINTS.GET_ADMIN_GROUPS_BY_CATEGORY(categoryId, page, limit));
+    return response.data.result.data;
   },
 
   // Lấy accounts theo groupId

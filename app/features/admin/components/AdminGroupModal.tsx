@@ -1,4 +1,5 @@
 import React from "react";
+import { CloudinaryUpload } from "~/components/shared/CloudinaryUpload";
 import Modal from "~/components/shared/Modal";
 
 interface AdminGroupModalProps {
@@ -41,17 +42,13 @@ const AdminGroupModal: React.FC<AdminGroupModalProps> = ({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Thumbnail (URL)
-          </label>
-          <input
-            type="text"
-            className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          <CloudinaryUpload
+            label="Thumbnail"
+            multiple={false}
             value={form.thumbnail}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, thumbnail: e.target.value }))
-            }
-            required
+            onChange={(urls) => setForm((f) => ({ ...f, thumbnail: urls[0] }))}
+            uploadPreset={import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET}
+            cloudName={import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}
           />
         </div>
         <div>

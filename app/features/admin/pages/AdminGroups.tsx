@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { formatDateTime, showSuccessToast } from "~/lib/utils";
-import { useAccountsStore } from "~/store/useAccountsStore";
 import { Pencil, Plus, Trash } from "lucide-react";
 import AdminGroupModal from "../components/AdminGroupModal";
 import AccountsApi from "~/api-requests/Accounts.requests";
@@ -12,13 +11,29 @@ export default function AdminGroups() {
 
   const params = new URLSearchParams(location.search);
   const categoryId = params.get("categoryId");
-  const { groups, isLoading, fetchGroupsByCategory } = useAccountsStore();
+
+  const [groupList, setGroupList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchAdminGroups = async () => {
+    setIsLoading(true);
+    try {
+      if (!categoryId) {
+        setGroupList([]);
+        return;
+      }
+      const res = await AccountsApi.getAdminGroupsByCategory(categoryId);
+      setGroupList(Array.isArray(res) ? res : []);
+    } catch (err) {
+      setGroupList([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (categoryId) fetchGroupsByCategory(categoryId);
-  }, [categoryId, fetchGroupsByCategory]);
-
-  const groupList = categoryId && groups[categoryId] ? groups[categoryId] : [];
+    fetchAdminGroups();
+  }, [categoryId]);
 
   const [openModal, setOpenModal] = useState(false);
   const [form, setForm] = useState({ title: "", thumbnail: "", status: 1 });
@@ -37,8 +52,7 @@ export default function AdminGroups() {
         return;
       }
       if (editId) {
-        // TODO: implement edit group API
-        // await AccountsApi.updateGroup(editId, { ...form, categoryId });
+        await AccountsApi.updateGroup(editId, { ...form, categoryId });
         showSuccessToast("Cập nhật nhóm thành công!");
       } else {
         await AccountsApi.addGroup({ ...form, categoryId });
@@ -47,13 +61,25 @@ export default function AdminGroups() {
       setOpenModal(false);
       setForm({ title: "", thumbnail: "", status: 1 });
       setEditId(null);
-      if (categoryId) fetchGroupsByCategory(categoryId);
+      fetchAdminGroups();
     } catch (err) {
       setFormError("Có lỗi xảy ra, thử lại!");
     } finally {
       setFormLoading(false);
     }
   }
+
+  const handleDeleteGroup = async (groupId: string) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa nhóm này?")) {
+      try {
+        await AccountsApi.deleteGroup(groupId);
+        showSuccessToast("Xóa nhóm thành công!");
+        fetchAdminGroups();
+      } catch (err) {
+        alert("Xóa thất bại. Vui lòng thử lại!");
+      }
+    }
+  };
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
@@ -83,6 +109,9 @@ export default function AdminGroups() {
                 </th>
                 <th className="px-4 py-3 text-left font-bold text-black">
                   ẢNH
+                </th>
+                <th className="px-4 py-3 text-left font-bold text-black">
+                  TRẠNG THÁI
                 </th>
                 <th className="px-4 py-3 text-left font-bold text-black">
                   NGÀY TẠO
@@ -134,16 +163,42 @@ export default function AdminGroups() {
                       )}
                     </td>
                     <td className="px-4 py-3">
+                      {group.status === 1 ? (
+                        <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold border border-green-300">
+                          Hiển thị
+                        </span>
+                      ) : (
+                        <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold border border-red-300">
+                          Ẩn
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
                       <span className="bg-black text-white text-xs px-2 py-1 rounded font-bold">
                         {formatDateTime(group.createdAt)}
                       </span>
                     </td>
                     <td className="px-4 py-3 h-full">
                       <div className="h-full flex gap-2 text-left">
-                        <button className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold">
+                        <button
+                          className="flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-2 py-2 rounded text-xs font-bold"
+                          onClick={() => {
+                            setEditId(group.id);
+                            setForm({
+                              title: group.title,
+                              thumbnail: group.thumbnail || "",
+                              status: group.status ?? 1,
+                            });
+                            setFormError("");
+                            setOpenModal(true);
+                          }}
+                        >
                           <Pencil size={14} />
                         </button>
-                        <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold">
+                        <button
+                          className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded text-xs font-bold"
+                          onClick={() => handleDeleteGroup(group.id)}
+                        >
                           <Trash size={14} />
                         </button>
                         <button

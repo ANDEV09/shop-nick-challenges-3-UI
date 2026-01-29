@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import Modal from "~/components/shared/Modal";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
-import { parseImages } from "~/lib/utils";
+import { parseImages, showSuccessToast } from "~/lib/utils";
 import AccountsApi, {
   type GameAccount,
 } from "~/api-requests/Accounts.requests";
@@ -14,7 +16,10 @@ export default function AccountApproveDetails() {
   const [accountName, setAccountName] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [status, setStatus] = useState("approved");
+  const [status, setStatus] = useState("2");
+  const [description, setDescription] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -25,6 +30,7 @@ export default function AccountApproveDetails() {
         setAccount(data);
         setAccountName(data.accountName || "");
         setPassword(data.password || "");
+        setDescription(data.description || "");
         setSelectedImageIndex(0);
       } catch (error) {
       } finally {
@@ -38,13 +44,24 @@ export default function AccountApproveDetails() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Call API to approve/reject account with new info
-    // ...
+    if (!accountId) return;
+    try {
+      await AccountsApi.approvePendingAccountStatus(
+        accountId,
+        Number(status),
+        description,
+        newPassword || undefined,
+      );
+      showSuccessToast("Cập nhật trạng thái Nick thành công!");
+      navigate(-1);
+    } catch (error: any) {
+      alert("Có lỗi xảy ra khi cập nhật trạng thái!");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg p-8">
+      <div className="max-w-7xl mx-auto bg-white rounded-lg p-8">
         {isLoading ? (
           <p className="text-center text-gray-600">Đang tải...</p>
         ) : !account ? (
@@ -75,7 +92,7 @@ export default function AccountApproveDetails() {
                   <p className="text-xs font-bold text-gray-700 mb-2">
                     Hình ảnh chi tiết:
                   </p>
-                  <div className="grid grid-cols-3 gap-1">
+                  <div className="grid grid-cols-3 gap-1 mb-4">
                     {images.map((image, index) => (
                       <button
                         key={index}
@@ -96,7 +113,66 @@ export default function AccountApproveDetails() {
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  {account?.details &&
+                    Object.keys(account.details).length > 0 && (
+                      <>
+                        <button
+                          type="button"
+                          className="px-4 py-2 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200 hover:bg-blue-100"
+                          onClick={() => setShowDetailsModal(true)}
+                        >
+                          Thông tin chi tiết
+                        </button>
+                        <Modal
+                          open={showDetailsModal}
+                          onClose={() => setShowDetailsModal(false)}
+                        >
+                          <div className="rounded-xl bg-white max-w-md w-full mx-auto">
+                            <h3 className="text-xl font-bold text-center py-4 border-b">
+                              Thông tin tài khoản
+                            </h3>
+                            <table className="w-full text-base">
+                              <tbody>
+                                {Object.entries(account.details).map(
+                                  ([key, value]) => (
+                                    <tr
+                                      key={key}
+                                      className="border-b last:border-b-0"
+                                    >
+                                      <td className="px-6 py-3 text-gray-700 font-medium w-1/2">
+                                        {key}
+                                      </td>
+                                      <td className="px-6 py-3 text-right font-bold text-gray-900">
+                                        {value}
+                                      </td>
+                                    </tr>
+                                  ),
+                                )}
+                              </tbody>
+                            </table>
+                            <div className="flex justify-center py-4">
+                              <button
+                                type="button"
+                                className="px-6 py-2 rounded bg-blue-600 text-white font-bold hover:bg-blue-700"
+                                onClick={() => setShowDetailsModal(false)}
+                              >
+                                Đóng
+                              </button>
+                            </div>
+                          </div>
+                        </Modal>
+                      </>
+                    )}
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded bg-blue-500 text-white font-bold hover:bg-blue-600 transition cursor-pointer"
+                    onClick={() => navigate(-1)}
+                  >
+                    Quay lại
+                  </button>
+                </div>
                 <form
                   onSubmit={handleSubmit}
                   className="bg-gray-50 rounded-lg border border-gray-200 p-4"
@@ -112,10 +188,8 @@ export default function AccountApproveDetails() {
                       <input
                         type="text"
                         value={accountName}
-                        onChange={(e) => setAccountName(e.target.value)}
                         className="w-full px-3 py-2 border rounded bg-gray-100 font-mono"
-                        required
-                        readOnly={!accountName}
+                        readOnly
                         placeholder="Không có dữ liệu"
                       />
                     </div>
@@ -123,14 +197,37 @@ export default function AccountApproveDetails() {
                       <label className="block text-sm font-bold mb-1">
                         Password
                       </label>
-                      <input
-                        type="text"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border rounded bg-gray-100 font-mono"
-                        required
-                        readOnly={!password}
-                        placeholder="Không có dữ liệu"
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          className="w-full px-3 py-2 border rounded bg-gray-100 font-mono pr-10"
+                          readOnly
+                          placeholder="Không có dữ liệu"
+                        />
+                        <button
+                          type="button"
+                          tabIndex={-1}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                          onClick={() => setShowPassword((v) => !v)}
+                        >
+                          {showPassword ? (
+                            <EyeOff size={18} />
+                          ) : (
+                            <Eye size={18} />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold mb-1">
+                        Mô tả tài khoản / Lý do hủy (nếu không duyệt)
+                      </label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="w-full px-3 py-2 border rounded bg-white min-h-15"
+                        placeholder="Mô tả tài khoản hoặc lý do hủy nếu không duyệt..."
                       />
                     </div>
                     <div>
@@ -153,24 +250,17 @@ export default function AccountApproveDetails() {
                         onChange={(e) => setStatus(e.target.value)}
                         className="w-full px-3 py-2 border rounded"
                       >
-                        <option value="approved">Duyệt</option>
-                        <option value="rejected">Không được duyệt</option>
+                        <option value="2">Duyệt</option>
+                        <option value="3">Không duyệt</option>
                       </select>
                     </div>
                   </div>
                   <div className="flex justify-center mt-6 gap-4">
                     <button
                       type="submit"
-                      className="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700 transition"
+                      className="bg-blue-600 text-white px-8 py-2 rounded font-bold hover:bg-blue-700 transition"
                     >
                       Xác nhận
-                    </button>
-                    <button
-                      type="button"
-                      className="border-2 border-gray-800 text-gray-800 px-6 py-2 rounded font-bold hover:bg-gray-50 transition"
-                      onClick={() => navigate(-1)}
-                    >
-                      Quay lại
                     </button>
                   </div>
                 </form>
